@@ -8,6 +8,19 @@ Python dependencies:
 
 `pip3 install -r requirements.txt`
 
+if your running a macOSX
+and you get an error for ffih.h file not found
+
+
+```
+sudo pip install ez_setup
+brew install pkg-config libffi
+```
+
+and than run
+
+'pip3 install -r requirements.txt'
+
 NPM dependencies:
 
 ```
