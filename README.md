@@ -20,7 +20,7 @@ brew install pkg-config libffi
 and than run
 
 ```
-pip3 install -r requirements.txt'
+pip3 install -r requirements.txt
 ```
 
 NPM dependencies:
