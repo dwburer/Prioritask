@@ -14,6 +14,7 @@ require_once  __DIR__ . '/../config/global.php';
 class Session {
 	
 	private static $self_instance;
+        public $last_error;
 	private $mysqli;
 
 	/**
@@ -24,6 +25,7 @@ class Session {
 	public function __construct($dbc) {
 		$this->mysqli = $dbc;
 		$this->sid = isset($_SESSION['sid']) ? $_SESSION['sid'] : null;
+                $this->last_error = "No recorded error...";
 	}
 
 	/**
@@ -47,28 +49,37 @@ class Session {
 	* @author Mitchell M. 
 	* @version 1.0
 	*/
-	public function register($username, $password, $email) {	}
+	public function register($username, $password, $email) {
+            return false;
+        }
 
 	/**
 	* Sets a users session in the database and sets their client side session
 	* @author Mitchell M. 
 	* @version 1.0
 	*/
-	public function login($username, $password) {	}
+	public function login($username, $password) {
+            return false;
+            
+        }
 
 	/**
 	* Validates an active session
 	* @author Mitchell M. 
 	* @version 1.0
 	*/
-	public function isLoggedIn() {	return true;	}
+	public function isLoggedIn() {	
+            return false;	
+        }
 
 	/**
 	* Destroys a session and logs a user out;
 	* @author Mitchell M. 
 	* @version 1.0
 	*/
-	public function logout() {} 
+	public function logout() {
+            return false;
+        } 
 }
 
 ?>
