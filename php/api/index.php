@@ -14,7 +14,7 @@ $session = new Session($db);
 
 foreach($_REQUEST as $key => $val) { $$key = trim($val); }
 
-$requests = array('addtask');
+$requests = array('addtask','login','register');
 
 if($request && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 	$file = './requests/' . $request . '.php';

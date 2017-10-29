@@ -49,8 +49,39 @@ class Session {
 	* @author Mitchell M. 
 	* @version 1.0
 	*/
-	public function register($username, $password, $email) {
-            return false;
+	public function register($email, $password, $passwordconf) {
+            $password = md5($password);
+            $passwordconf = md5($passwordconf);
+            if (!$email)
+                $errors[] = "Email is not defined!";
+            if (!$password)
+                $errors[] = "Password is not defined!";
+            if (!$passwordconf)
+                $errors[] = "Password confirmation is not defined!";
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) == false)
+                $errors[] = "Email address is invalid!";
+            if ($password != $passwordconf)
+                $errors[] = "The two passwords you entered do not match!";
+            if ($email) {
+                $stmt = $this->mysqli->prepare("SELECT * FROM `users` WHERE `email`= ?");
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $stmt->store_result();
+                if ($stmt->num_rows > 0) {
+                    $errors[] = "The e-mail address you supplied is already in use of another user!";
+                }
+                $stmt->close();
+            }
+            if (!isset($errors)) {
+                //register the account
+                $mysqli = $this->mysqli->prepare("INSERT INTO `users` (`email`, `password`) VALUES (?,?)");
+                $mysqli->bind_param("ss", $email, $password);
+                $mysqli->execute();
+                $mysqli->close();
+                echo "Registered successfully with email: " . $email . " and password: " . $password;
+            } else {
+                var_dump($errors);
+            }
         }
 
 	/**
@@ -58,11 +89,21 @@ class Session {
 	* @author Mitchell M. 
 	* @version 1.0
 	*/
-	public function login($username, $password) {
-            return false;
-            
+	public function login($email, $pass) {
+            $email = htmlspecialchars(mysqli_real_escape_string($this->mysqli, $email));
+            $pass = md5($pass);
+            $stmt = $this->mysqli->prepare("SELECT * FROM `users` WHERE `email` = ? AND `password` = ?");
+            $stmt->bind_param("ss", $email, $pass);
+            $stmt->execute();
+            $stmt->store_result();
+            if ($stmt->num_rows > 0) {
+                echo "Successfully logged in to " . $email . "!";
+                return true;
+            } else {
+                echo "Invalid credentials! Try again.";
+            }
         }
-
+        
 	/**
 	* Validates an active session
 	* @author Mitchell M. 
