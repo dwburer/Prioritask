@@ -1,3 +1,3 @@
 <?php
-$session->login($email,$password);
+echo($session->login($email,$password));
 ?>

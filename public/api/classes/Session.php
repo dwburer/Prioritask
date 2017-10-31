@@ -80,7 +80,7 @@ class Session {
                 $mysqli->close();
                 echo "Registered successfully with email: " . $email . " and password: " . $password;
             } else {
-                var_dump($errors);
+                echo json_encode($errors);
             }
         }
 
@@ -97,11 +97,11 @@ class Session {
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows > 0) {
-                echo "Successfully logged in to " . $email . "!";
-                return true;
+                $response = "Successfully logged in to " . $email . "!";
             } else {
-                echo "Invalid credentials! Try again.";
+                $response = "Invalid credentials! Try again.";
             }
+            return json_encode($response);
         }
         
 	/**
