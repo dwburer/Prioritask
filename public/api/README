@@ -52,7 +52,7 @@ The URL for the api is: http://104.236.250.1/api/
 ERROR EXPLANATION
 ===============
 
-If a request is not pre-configured in the API, you will recieve a response: X
+If a request is not pre-configured in the API, you will recieve a response: Request not found in host file-system OR not whitelisted.
 
 If the request is malformed when it hits the API, you will recieve a list of boolean codes. The key is here:
 A=Was the SERVER property "HTTP X REQUESTED WITH" set? (Header that is used to determine if ajax call is valid)
