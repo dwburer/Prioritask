@@ -1,2 +1,3 @@
 # Prioritask #
 
+DOCUMENT ROOT = /public/
