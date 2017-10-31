@@ -42,6 +42,7 @@ In situations where a simple success/failure response will work, it will just re
 For things with a wide arrange of possible errors or outputs (such as registration), the API will return a json encoded array of all errors 
 encountered/whatever needs to be made known that you can represent through the GUI.
 
+Responses can be catered to the intended feature if you just let me know what you want it to return from the database.
 
 The URL for the demo is: http://104.236.250.1/demo/
 The URL for the api is: http://104.236.250.1/api/
