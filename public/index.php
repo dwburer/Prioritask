@@ -1,30 +1,71 @@
-<?php include 'header.php'; ?>
+<?php include 'templates/header.php'; ?>
 
           <h1>Dashboard</h1>
           <a href="./demo"> php api usage demo </a>
+          <div class="card">
+            <div class="card-header">
+              Task
+            </div>
+            <div class="card-block">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-sm-auto">
+                    <div class="progress blue">
+                      <span class="progress-left">
+                          <span class="progress-bar"></span>
+                      </span>
+                      <span class="progress-right">
+                          <span class="progress-bar"></span>
+                      </span>
+                      <div class="progress-value">90%</div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <h4 class="card-title">Register for classes</h4>
+                    <p class="card-text">Double check RAN beforehand. Email advisor if neccesary.</p>
+                    <a href="#" class="btn btn-primary">Mark as complete</a>
+                    <a href="#" class="btn btn-secondary">Edit</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-muted">
+              Created 2 days ago
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              Task
+            </div>
+            <div class="card-block">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-sm-auto">
+                    <div class="progress yellow">
+                      <span class="progress-left">
+                          <span class="progress-bar"></span>
+                      </span>
+                      <span class="progress-right">
+                          <span class="progress-bar"></span>
+                      </span>
+                      <div class="progress-value">75%</div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <h4 class="card-title">Database Systems midterm</h4>
+                    <p class="card-text">Consult textbook.</p>
+                    <a href="#" class="btn btn-primary">Mark as complete</a>
+                    <a href="#" class="btn btn-secondary">Edit</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-muted">
+              Created 3 days ago
+            </div>
+          </div>
 
-          <section class="row text-center placeholders">
-            <div class="col-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <div class="text-muted">Something else</div>
-            </div>
-            <div class="col-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-          </section>
+          
 
           <h2>Section title</h2>
           <div class="table-responsive">
@@ -154,4 +195,4 @@
               </tbody>
             </table>
           </div>
-<?php include 'footer.php'; ?>
+<?php include 'templates/footer.php'; ?>
