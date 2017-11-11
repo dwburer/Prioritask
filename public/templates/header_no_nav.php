@@ -23,6 +23,4 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
 
-		<?php include 'templates/navigation.php'; ?>
-
         <main class="col pt-3">

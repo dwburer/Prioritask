@@ -11,7 +11,7 @@
  */
 require_once(__DIR__ . '/config/global.php');
 function __autoload($class_name) {
-	require_once(__DIR__ . '/classes/' . $class_name . '.php');	
+	require_once(__DIR__ . '/classes/' . $class_name . '.php');
 }
 
 /**
@@ -24,7 +24,7 @@ $session = new Session($db);
 foreach($_POST as $key => $val) { $$key = trim($val); }
 
 //List of valid requests that are handled
-$VALID_REQUESTS = array('addtask', 'login', 'register');
+$VALID_REQUESTS = array('addtask', 'login', 'register', 'getTasks');
 
 //Validating the existance of server variable "HTTP_X_REQUESTED_WITH", if it exists it can verify that the call is ajax
 $httpXrequested = isset($_SERVER['HTTP_X_REQUESTED_WITH']);
@@ -34,12 +34,12 @@ $isAjaxCall = $httpXrequested ? strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) ==
 
 //Validates all the required conditions to make an API call
 if ($httpXrequested && ($isAjaxCall) && isset($request)) {
-    
+
     //Sets the access variable that is checked for in the included files and forms a path to the request targed
     $access = true;
     $file = './requests/' . $request . '.php';
-    
-    //If the request is in the subfolder, and its listed in the valid request array.. 
+
+    //If the request is in the subfolder, and its listed in the valid request array..
     //open it
     if (file_exists($file) && in_array($request, $VALID_REQUESTS)) {
         //LOAD THE CONTENT OF THE REQUEST

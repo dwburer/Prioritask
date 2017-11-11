@@ -9,17 +9,17 @@
  * @since      Class available since Release 1.0.0
  */
 
-require_once  __DIR__ . '/../config/global.php'; 
+require_once  __DIR__ . '/../config/global.php';
 
 class Session {
-	
+
 	private static $self_instance;
         public $last_error;
 	private $mysqli;
 
 	/**
 	* Constructs the class, setting the mysqli variable to the active connection
-	* @author Mitchell M. 
+	* @author Mitchell M.
 	* @version 1.1.0
 	*/
 	public function __construct($dbc) {
@@ -30,11 +30,11 @@ class Session {
 
 	/**
 	* Destructs the class
-	* @author Mitchell M. 
+	* @author Mitchell M.
 	* @version 0.7
 	*/
 	public function __destruct() {
-		
+
 	}
 
 	public static function getInstance($dbc) {
@@ -46,7 +46,7 @@ class Session {
 
 	/**
 	* Registers the user into the database
-	* @author Mitchell M. 
+	* @author Mitchell M.
 	* @version 1.0
 	*/
 	public function register($email, $password, $passwordconf) {
@@ -86,7 +86,7 @@ class Session {
 
 	/**
 	* Sets a users session in the database and sets their client side session
-	* @author Mitchell M. 
+	* @author Mitchell M.
 	* @version 1.0
 	*/
 	public function login($email, $pass) {
@@ -97,30 +97,42 @@ class Session {
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows > 0) {
-                $response = "Successfully logged in to " . $email . "!";
+                $response = array(
+					session_id => 'new_session_id',
+					expiration => time()
+				);
             } else {
                 $response = "Invalid credentials! Try again.";
             }
             return json_encode($response);
         }
-        
+
 	/**
 	* Validates an active session
-	* @author Mitchell M. 
+	* @author Mitchell M.
 	* @version 1.0
 	*/
-	public function isLoggedIn() {	
-            return false;	
+	public function isLoggedIn() {
+            return false;
         }
 
 	/**
 	* Destroys a session and logs a user out;
-	* @author Mitchell M. 
+	* @author Mitchell M.
 	* @version 1.0
 	*/
 	public function logout() {
             return false;
-        } 
+        }
+
+	/**
+	* Validates and adds a new task to the database
+	* @author Brett M.
+	* @version 1.0
+	*/
+	public function addTask($email, $pass, $title, $duration, $due, $desc) {
+
+		}
 }
 
 ?>
