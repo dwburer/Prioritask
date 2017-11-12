@@ -3,29 +3,28 @@
 <h1>Editing task: <span id="task-name">New Task</span></h1>
 
 <div class="task-form">
-	<div>
+	<div class="prioritask-padding">
 		Title: <input type="text" name="title" value="Paper Prototype">
-
-		<br>
+	</div>
+	<div>
 		Due: <input type="datetime-local" name="estTimeToComplete">
-
-		<br>
+	</div>
+	<div>
 		Estimated Time to Complete:
 		Days <input type="number" name="day" value="7">
 		Hours <input type="number" name="hour" value="2" max="24">
 		Minutes <input type="number" name="minutes" value="30" max="60">
-
-		<br>
+	</div>
+	<div>
 		Location: <input type="text" name="Location" value="">
-
-		<br>
+	</div>
+	<div>
 		Add Image:
 		<input type="file" name="fileToUpload" id="fileToUpload">
 		<input type="submit" value="Upload Image" name="submit">
-
-		<br>
+	</div>
+	<div>
 		Notes: <input type="text" name="Notes" value="Remind Partners to pull weight">
-
 	</div>
 </div>
 
