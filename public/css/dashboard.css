@@ -58,9 +58,13 @@ h1 {
 /*
  * Dashboard
  */
+.line-separator {
+  border-bottom: 1px solid gray;
+}
 
 .card-list .getting-started {
 	text-align: center;
+  padding: 2rem;
 }
 
  /* Placeholders */
