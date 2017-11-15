@@ -2,6 +2,7 @@
 // 1 = REGISTER
 var formState = 0;
 function swapState() {
+    clearFields();
     if (formState == 0) {
         //FADE LOGIN AND SHOW REGISTER
         $("div#regfield").fadeIn("slow", function () {
@@ -17,6 +18,11 @@ function swapState() {
             formState = 0;
         })
     }
+}
+
+function clearFields() {
+    $(":text").val("");
+    $(":password").val("");
 }
 
 
@@ -68,4 +74,25 @@ $("#register-button").on("click", function () {
         swapState();
         return;
     }
+    let email = $('input#email').val();
+    let password = $('input#password').val();
+    let passwordconf = $('input#passwordconf').val();
+    $.ajax({
+        type: "POST",
+        data: 'request=register&email=' + email + '&password=' + password + '&passwordconf=' + passwordconf,
+        url: 'api/index.php',
+        async: true,
+        success: function (data) {
+            //user registered and set as logged in!
+            if (data == 1) {
+                //LOGIN WAS SUCCESSFUL, REDIRECT TO DASH
+                document.location.href = 'dashboard.php';
+            } else {
+                alert(data);
+            }
+        },
+        error: function (data) {
+            console.log('Login error!: ' + data);
+        }
+    });
 });

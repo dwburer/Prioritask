@@ -12,7 +12,7 @@
         </div>
         <div id="regfield" class="row no-gutters pt-md-2">
             <label for="password">Confirm Password:</label>
-            <input type="password" class="form-control" id="password">
+            <input type="password" class="form-control" id="passwordconf">
         </div>
         <div class="row no-gutters pt-md-4">
             <div class="col">

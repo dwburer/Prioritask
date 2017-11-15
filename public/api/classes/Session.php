@@ -116,9 +116,9 @@ class Session {
             $mysqli->bind_param("ss", $email, $pass);
             $mysqli->execute();
             $mysqli->close();
-            echo "Registered successfully with email: " . $email . " and password (hashed): " . $pass;
+            return true;
         } else {
-            echo json_encode($errors);
+            return json_encode($errors);
         }
     }
 
