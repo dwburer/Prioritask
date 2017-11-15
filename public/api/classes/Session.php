@@ -269,15 +269,6 @@ class Session {
     }
 
     /**
-     * Destroys a session and logs a user out;
-     * @author Mitchell M.
-     * @version 1.0
-     */
-    public function logout() {
-        return false;
-    }
-
-    /**
      * Validates and adds a new task to the database
      * @author Brett M.
      * @version 1.0
