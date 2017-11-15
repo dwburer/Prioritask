@@ -20,4 +20,6 @@ function __autoload($class_name) {
 $db = Database::getConnection();
 $session = new Session($db);
 
+echo $session->logout();
+
 echo $session->isLoggedIn() ? "TRUE" : "FALSE";

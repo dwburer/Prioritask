@@ -20,3 +20,28 @@
 </div>
 
 <?php include 'templates/footer.php'; ?>
+
+<script type="text/javascript">
+$(function () {
+    //checking if user is logged in 
+    //then redirecting them to the dashboard if they are
+    var api = "./api/";
+    //jQuery ajax call to the api
+    $.ajax({
+        type: 'POST',
+        data: 'request=checklogin',
+        url: api + 'index.php',
+        async: true,
+        success: function (response) {
+            //If api returns 1
+            if (response == 1) {
+                document.location.href = 'dashboard.php';
+            }
+            //Otherwise do nothing
+        },
+        error: function () {
+            alert("An error has occured while verifying logged-in status!");
+        }
+    });
+});
+</script>

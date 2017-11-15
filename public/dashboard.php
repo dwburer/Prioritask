@@ -1,5 +1,4 @@
 <?php include 'templates/header.php'; ?>
-
 <h1>Dashboard</h1>
 
 <div class="card-list">

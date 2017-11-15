@@ -24,7 +24,7 @@ $session = new Session($db);
 foreach($_POST as $key => $val) { $$key = trim($val); }
 
 //List of valid requests that are handled
-$VALID_REQUESTS = array('addtask', 'login', 'register', 'getTasks');
+$VALID_REQUESTS = array('addtask', 'login', 'register', 'getTasks', 'checklogin');
 
 //Validating the existance of server variable "HTTP_X_REQUESTED_WITH", if it exists it can verify that the call is ajax
 $httpXrequested = isset($_SERVER['HTTP_X_REQUESTED_WITH']);

@@ -134,10 +134,7 @@ class Session {
             //User exists, get their userID for session creation
             $userid = $this->getUID($email);
             if ($this->handleSID($userid)) {
-                $response = array(
-                    session_id => $this->sid,
-                    expiration => $this->buildExpireTime()
-                );
+                return true;
             }
         } else {
             $response = "Invalid login credentials!";

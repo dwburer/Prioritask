@@ -6,6 +6,5 @@ DOCUMENT ROOT = /public/
 
  * Set up a login page
  * Finish server-side API
- 	- addTask looks incomplete
-	- Finish getTasks
+	- Finish addTask, getTask request types
  * Finish task edit page
