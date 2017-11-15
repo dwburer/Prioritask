@@ -1,7 +1,7 @@
 <?php include 'templates/header_no_nav.php'; ?>
 <div class="col-sm-12 col-md-6 offset-sm-0 offset-md-3">
     <div id="login" class="userform">
-        <div class="h1 pb-md-3">PrioriTask Login</div>
+        <div class="h1 pb-md-3">PrioriTask</div>
         <div class="row no-gutters">
             <label for="email">Email:</label>
             <input type="text" class="form-control" id="email">
