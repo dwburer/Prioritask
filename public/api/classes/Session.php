@@ -137,7 +137,7 @@ class Session {
                 return true;
             }
         } else {
-            $response = "Invalid login credentials!";
+            $response = false;
         }
         return json_encode($response);
     }

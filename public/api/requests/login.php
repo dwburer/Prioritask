@@ -1,4 +1,9 @@
 <?php
 require_once('base.php');
-echo($session->login($email,$password));
+$return = $session->login($email,$password);
+if($return) {
+    echo 1;
+} else {
+    echo "Unable to log you in...";
+}
 ?>

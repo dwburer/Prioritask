@@ -1,10 +1,14 @@
 <?php
 require_once('base.php');
-$return = $session->register($email,$password,$passwordconf);
-if(!$return)
-{
-    echo $return;
+$registered = $session->register($email,$password,$passwordconf);
+if($registered === true) {
+    $loginResponse = $session->login($email,$password);
+    if($loginResponse === true) {
+        echo 1;
+    } else {
+        echo "Failed to log you in automagically!";
+    }
 } else {
-    echo $session->login($email, $password);
+    echo $registered;
 }
 ?>
