@@ -25,7 +25,6 @@ class Session {
     public function __construct($dbc) {
         $this->mysqli = $dbc;
         $this->qb = QueryBuilder::getInstance();
-        $this->last_error = "No recorded error..."; //Determines if the user has a session id set
 
         $this->sid = isset($_SESSION['sid']) ? $_SESSION['sid'] : null;
         if ($this->sid != null) {
