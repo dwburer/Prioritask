@@ -16,7 +16,7 @@
         <link href="css/main.css" rel="stylesheet">
         <link href="css/dashboard.css" rel="stylesheet">
         <link href="css/card.css" rel="stylesheet">
-		<link href="css/edit_task.css" rel="stylesheet">
+        <link href="css/edit_task.css" rel="stylesheet">
     </head>
     <body>
         <!--[if lte IE 9]>

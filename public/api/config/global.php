@@ -1,9 +1,9 @@
 <?php
-/**
-* @author Mitchell M. 
-* @version 1.0.0
-*/
 
+/**
+ * @author Mitchell M. 
+ * @version 1.0.0
+ */
 session_start();
 
 define('DB_HOST', '104.236.250.1');

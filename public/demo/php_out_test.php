@@ -1,17 +1,18 @@
 
 <?php
-/**
-* @package Prioritask
-* @author Mitchell M.
-* @version 1.0.0
-*/
 
+/**
+ * @package Prioritask
+ * @author Mitchell M.
+ * @version 1.0.0
+ */
 /**
  * Loading all the required classes/configuration files first
  */
 require_once(__DIR__ . '/../api/config/global.php');
+
 function __autoload($class_name) {
-	require_once(__DIR__ . '/../api/classes/' . $class_name . '.php');
+    require_once(__DIR__ . '/../api/classes/' . $class_name . '.php');
 }
 
 /**

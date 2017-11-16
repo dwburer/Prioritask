@@ -1,19 +1,19 @@
 $(function () {
     var pathToHandler = "./../api/";
     $("a#logout").on("click", function (e) {
-    $.ajax({
-        type: 'POST',
-        data: 'request=logout&r=t',
-        url: pathToHandler + 'index.php',
-        async: true,
-        success: function (response) {
-            document.location.href = "index.php";
-        },
-        error: function () {
-            alert("Error with logout!");
-        }
+        $.ajax({
+            type: 'POST',
+            data: 'request=logout&r=t',
+            url: pathToHandler + 'index.php',
+            async: true,
+            success: function (response) {
+                document.location.href = "index.php";
+            },
+            error: function () {
+                alert("Error with logout!");
+            }
+        });
     });
-});
     $('form#task').submit(function (e) {
         e.preventDefault();
         var form = $(this);
@@ -24,16 +24,16 @@ $(function () {
         var minutetc = form.find('input#minutetc').val();
         var location = form.find('input#location').val();
         var notes = form.find('input#notes').val();
-        
+
         form.hide();
         form.html('<h3>Your task has been submitted. </h3>');
         form.fadeIn("slow");
 
         $.ajax({
             type: 'POST',
-            data: 'request=addtask&task=' + task + '&due='
-                    + due+'&datetc='+datetc+'&hourtc='+hourtc+'&minutetc='
-                    +minutetc+'&location='+location+'&notes='+notes,
+            data: 'request=addTask&task=' + task + '&due='
+                    + due + '&datetc=' + datetc + '&hourtc=' + hourtc + '&minutetc='
+                    + minutetc + '&location=' + location + '&notes=' + notes,
             url: pathToHandler + 'index.php',
             async: true,
             success: function (data) {
@@ -45,7 +45,7 @@ $(function () {
             }
         });
     });
-    
+
     $('form#login').submit(function (e) {
         e.preventDefault();
         var form = $(this);
@@ -69,7 +69,7 @@ $(function () {
             }
         });
     });
-    
+
     $('form#register').submit(function (e) {
         e.preventDefault();
         var form = $(this);
@@ -82,7 +82,7 @@ $(function () {
 
         $.ajax({
             type: 'POST',
-            data: 'request=register&email=' + email + '&password=' + password + '&passwordconf='+passwordc,
+            data: 'request=register&email=' + email + '&password=' + password + '&passwordconf=' + passwordc,
             url: pathToHandler + 'index.php',
             async: true,
             success: function (data) {
@@ -94,5 +94,5 @@ $(function () {
             }
         });
     });
-    
+
 });

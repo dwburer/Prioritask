@@ -207,14 +207,14 @@ class Session {
         if ($qry->exec()) {
             $_SESSION['sid'] = $sid;
             return 1;
-        } 
+        }
         return 0;
     }
-    
+
     function buildExpireTime() {
         return time() + 60 * SESSION_LENGTH;
     }
-    
+
     /**
      * Is a user logged in?
      * @return type
@@ -273,10 +273,25 @@ class Session {
      * @author Brett M.
      * @version 1.0
      */
-    public function addTask($email, $pass, $title, $duration, $due, $desc) {
-        
+    public function addTask($title, $due, $datetc, $hourtc, $minutetc, $location, $notes) {
+        if ($this->isLoggedIn()) {
+            //puts the est. completion time together
+            $tc = $datetc . ":" . $hourtc . ":" . $minutetc;
+            $uid = $this->getUid($this->sid);
+            $stmt = $this->mysqli->prepare("INSERT INTO `task` "
+                    . "(`userid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`) "
+                    . "VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("isssss", $uid, $title, $due, $tc, $notes, $location);
+            if ($stmt->execute()) {
+                $stmt->close();
+                return true;
+            }
+            echo "hi";
+            echo $this->mysqli->error;
+            return false;
+        }
     }
-   
+
     /**
      * Redirects the the specified location
      * @param string $location to redirect to
@@ -294,7 +309,7 @@ class Session {
         }
         die();
     }
-    
+
     /**
      * Generates a random string based on the length provided
      * @param int $length to use

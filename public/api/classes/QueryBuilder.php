@@ -40,7 +40,7 @@ class QueryBuilder {
     public static function getInstance() {
         return new QueryBuilder();
     }
-    
+
     /**
      * Begins a new instance of the querybuilder
      * @return \QueryBuilder
@@ -281,13 +281,13 @@ class QueryBuilder {
     function get() {
         $ret = null;
         $query_result = $this->db->query($this->query);
-            while ($row = $query_result->fetch_assoc()) {
-                $ret[] = $row;
-            }
+        while ($row = $query_result->fetch_assoc()) {
+            $ret[] = $row;
+        }
         $query_result->free();
         return $ret;
     }
-    
+
     /**
      * Returns the num rows
      * @return numRows int
@@ -296,7 +296,7 @@ class QueryBuilder {
         $query_result = $this->db->query($this->query);
         return $query_result->num_rows;
     }
-    
+
     /**
      * Do records exist with the current query?
      * @return type
@@ -314,7 +314,7 @@ class QueryBuilder {
         $query = $this->db->query($this->query);
         return $query;
     }
-    
+
     /**
      * Returns the last error recorded
      * @return type

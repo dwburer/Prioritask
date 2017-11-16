@@ -1,16 +1,17 @@
 <?php
-/**
-* @package Prioritask
-* @author Mitchell M.
-* @version 1.2.0
-*/
 
+/**
+ * @package Prioritask
+ * @author Mitchell M.
+ * @version 1.2.0
+ */
 /**
  * Loading all the required classes/configuration files first
  */
 require_once(__DIR__ . '/config/global.php');
+
 function __autoload($class_name) {
-	require_once(__DIR__ . '/classes/' . $class_name . '.php');
+    require_once(__DIR__ . '/classes/' . $class_name . '.php');
 }
 
 /**
@@ -20,10 +21,12 @@ $db = Database::getConnection();
 $session = new Session($db);
 
 //Copies all the POST data values into variable variable names
-foreach($_POST as $key => $val) { $$key = trim($val); }
+foreach ($_POST as $key => $val) {
+    $$key = trim($val);
+}
 
 //List of valid requests that are handled
-$VALID_REQUESTS = array('addtask', 'login', 'register', 'getTasks', 'checklogin', 'logout');
+$VALID_REQUESTS = array('addTask', 'login', 'register', 'getTasks', 'checklogin', 'logout');
 
 //Validating the existance of server variable "HTTP_X_REQUESTED_WITH", if it exists it can verify that the call is ajax
 $httpXrequested = isset($_SERVER['HTTP_X_REQUESTED_WITH']);
@@ -49,10 +52,10 @@ if ($httpXrequested && ($isAjaxCall) && isset($request)) {
 } else {
     //Build error message
     $req_out = isset($request) ? $request : null;
-    $a = $httpXrequested ? "T":"F";
-    $b = $isAjaxCall ? "T":"F";
-    $c = isset($request) ? "T":"F";
+    $a = $httpXrequested ? "T" : "F";
+    $b = $isAjaxCall ? "T" : "F";
+    $c = isset($request) ? "T" : "F";
     //Print error message
-    die("Attempting to direct access OR malformed request sent to API! (API Level) <br /> Errors: A[" . $a . "] // B[" . $b . "] // C[" . $c. "] // D[" . $req_out . "]");
+    die("Attempting to direct access OR malformed request sent to API! (API Level) <br /> Errors: A[" . $a . "] // B[" . $b . "] // C[" . $c . "] // D[" . $req_out . "]");
 }
 ?>

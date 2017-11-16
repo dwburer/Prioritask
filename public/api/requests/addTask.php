@@ -1,4 +1,5 @@
 <?php
+
 require_once "base.php";
-echo var_dump($_POST);
+$session->addTask($task, $due, $datetc, $hourtc, $minutetc, $location, $notes);
 ?>

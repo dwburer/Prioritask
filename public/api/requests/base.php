@@ -1,4 +1,5 @@
 <?php
-if(empty($access)) {
+
+if (empty($access)) {
     die("No direct access allowed! (Request level)");
 }

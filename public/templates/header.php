@@ -16,13 +16,13 @@
         <link href="css/main.css" rel="stylesheet">
         <link href="css/dashboard.css" rel="stylesheet">
         <link href="css/card.css" rel="stylesheet">
-		    <link href="css/edit_task.css" rel="stylesheet">
+        <link href="css/edit_task.css" rel="stylesheet">
     </head>
     <body>
         <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
 
-		<?php include 'templates/navigation.php'; ?>
+        <?php include 'templates/navigation.php'; ?>
 
         <main class="col pt-3">
