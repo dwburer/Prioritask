@@ -1,18 +1,39 @@
 $(function () {
     var pathToHandler = "./../api/";
-    
+    $("a#logout").on("click", function (e) {
+    $.ajax({
+        type: 'POST',
+        data: 'request=logout&r=t',
+        url: pathToHandler + 'index.php',
+        async: true,
+        success: function (response) {
+            document.location.href = "index.php";
+        },
+        error: function () {
+            alert("Error with logout!");
+        }
+    });
+});
     $('form#task').submit(function (e) {
         e.preventDefault();
         var form = $(this);
         var task = form.find('input#task').val();
-        var date = form.find('input#date').val();
+        var due = form.find('input#due').val();
+        var datetc = form.find('input#daytc').val();
+        var hourtc = form.find('input#hourtc').val();
+        var minutetc = form.find('input#minutetc').val();
+        var location = form.find('input#location').val();
+        var notes = form.find('input#notes').val();
+        
         form.hide();
         form.html('<h3>Your task has been submitted. </h3>');
         form.fadeIn("slow");
 
         $.ajax({
             type: 'POST',
-            data: 'request=addtask&task=' + task + '&date=' + date,
+            data: 'request=addtask&task=' + task + '&due='
+                    + due+'&datetc='+datetc+'&hourtc='+hourtc+'&minutetc='
+                    +minutetc+'&location='+location+'&notes='+notes,
             url: pathToHandler + 'index.php',
             async: true,
             success: function (data) {
