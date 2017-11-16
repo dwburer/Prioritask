@@ -286,8 +286,6 @@ class Session {
                 $stmt->close();
                 return true;
             }
-            echo "hi";
-            echo $this->mysqli->error;
             return false;
         }
     }
