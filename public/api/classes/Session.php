@@ -6,7 +6,7 @@
  * @category   Class
  * @package    com.Prioritask.classes.Session
  * @author     Mitchell M. <mm11096@georgiasouthern.edu>
- * @version    Release: 1.0.0
+ * @version    Release: 1.5.0
  * @since      Class available since Release 1.0.0
  */
 require_once __DIR__ . '/../config/global.php';
@@ -19,8 +19,9 @@ class Session {
 
     /**
      * Constructs the class, setting the mysqli variable to the active connection
+     * @param MySQLi DB Instance $dbc
      * @author Mitchell M.
-     * @version 1.1.0
+     * @version 1.0.0
      */
     public function __construct($dbc) {
         $this->mysqli = $dbc;
@@ -34,14 +35,12 @@ class Session {
     }
 
     /**
-     * Destructs the class
+     * Static singleton instance is set only once, retrieved if already set
      * @author Mitchell M.
-     * @version 0.7
+     * @param type $dbc
+     * @return type
+     * @version 1.0.0
      */
-    public function __destruct() {
-        
-    }
-
     public static function getInstance($dbc) {
         if (!self::$self_instance) {
             self::$self_instance = new Session($dbc);
@@ -50,10 +49,12 @@ class Session {
     }
 
     /**
-     * Validates if a session is valid, and clears it if not
-     * @param type $sid
-     * @param type $currentTime
+     * Validates if a session cookie is valid, and clears it if not
+     * @author Mitchell M.
+     * @param string $sid
+     * @param int $currentTime unixtimestamp
      * @return boolean
+     * @version 1.0.0
      */
     function validate($sid, $currentTime) {
         $sid = htmlentities(mysqli_real_escape_string($this->mysqli, $sid));
@@ -81,10 +82,115 @@ class Session {
         $stmt->close();
     }
 
+    /*
+     * Manages sessions and prevents more than one session per user
+     * @param int $userid
+     * @author Mitchell M.
+     * @version 1.0.0
+     */
+
+    public function handleSID($userid) {
+        //Does a session already exist for this userID?
+        if ($this->exists($userid)) {
+            //Session exists, clear it...
+            if (!$this->clearByUID($userid)) {
+                //Couldnt clear the session, return a json element containing the error
+                return json_encode("Couldn't clear SID when creating new session.");
+            }
+        }
+        //Creates the session with the specific userid
+        if ($this->buildSID($userid)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Does a session exist for the UserID passed
+     * @author Mitchell M.
+     * @param int $userid
+     * @return boolean
+     * @version 1.0.0
+     */
+    function exists($userid) {
+        $qry = $this->qb->start();
+        $qry->select("*")->from("sessions")->where("userid", "=", $userid);
+        if ($qry->recordsExist()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Creates a session entry into the database and on the client machine
+     * @author Mitchell M.
+     * @param int $userid
+     * @return boolean
+     * @version 1.0.0
+     */
+    function buildSID($userid) {
+        $sid = $this->generateRandID(16);
+        $timestamp = $this->buildExpireTime();
+
+        $qry = $this->qb->start();
+        $qry->insert_into("sessions", array('userid' => $userid, 'sid' => $sid, 'timestamp' => $timestamp));
+        if ($qry->exec()) {
+            $_SESSION['sid'] = $sid;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Builds the session management system's current expiration timestamp
+     * @author Mitchell M.
+     * @return type
+     * @version 1.0.0
+     */
+    function buildExpireTime() {
+        return time() + 60 * SESSION_LENGTH;
+    }
+
+    /**
+     * Clear session based on UserID
+     * @author Mitchell M.
+     * @param type $userid
+     * @return boolean
+     * @version 1.0.0
+     */
+    function clearByUID($userid) {
+        if ($this->mysqli->query("DELETE FROM sessions WHERE userid='{$userid}'")) {
+            return true;
+        } else {
+            return $this->mysqli->error;
+        }
+        unset($_SESSION['sid']);
+    }
+
+    /**
+     * Clear session based on SID
+     * @author Mitchell M.
+     * @param type $sid
+     * @version 1.0.0
+     */
+    function clear($sid) {
+        $sid = mysqli_real_escape_string($this->mysqli, $sid);
+        $this->mysqli->query("DELETE FROM sessions WHERE sid='{$sid}'");
+        unset($_SESSION['sid']);
+    }
+
+    /**
+     * END SESSION MANAGEMENT FUNCTIONS
+     * BEGIN USER MANAGEMENT FUNCTIONS
+     */
+
     /**
      * Registers the user into the database
+     * @param string $email
+     * @param string $password
+     * @param string $passwordconf
      * @author Mitchell M.
-     * @version 1.0
+     * @version 1.0.0
      */
     public function register($email, $password, $passwordconf) {
         $pass = md5($password);
@@ -123,8 +229,10 @@ class Session {
 
     /**
      * Sets a users session in the database and sets their client side session
-     * @author Mitchell M. 
-     * @version 1.0
+     * @param string $email
+     * @param string $pass
+     * @author Mitchell M.
+     * @version 1.0.0
      */
     function login($email, $pass) {
         $response = "Initial login state";
@@ -141,10 +249,13 @@ class Session {
         return json_encode($response);
     }
 
-    /*
+    /**
      * Validates that the login details are valid
+     * @param string $email
+     * @param string $password
+     * @author Mitchell M.
+     * @version 1.0.0
      */
-
     function userExists($email, $password) {
         $email = htmlspecialchars(mysqli_real_escape_string($this->mysqli, $email));
         $pass = md5($password);
@@ -158,75 +269,13 @@ class Session {
         return false;
     }
 
-    /*
-     * Manages sessions and prevents more than one session per user
-     */
-
-    public function handleSID($userid) {
-        //Does a session already exist for this userID?
-        if ($this->exists($userid)) {
-            //Session exists, clear it...
-            if (!$this->clearByUID($userid)) {
-                //Couldnt clear the session, return a json element containing the error
-                return json_encode("Couldn't clear SID when creating new session.");
-            }
-        }
-        //Creates the session with the specific userid
-        if ($this->buildSID($userid)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Does a session exist for the UserID passed
-     * @param type $userid
-     * @return boolean
-     */
-    function exists($userid) {
-        $qry = $this->qb->start();
-        $qry->select("*")->from("sessions")->where("userid", "=", $userid);
-        if ($qry->recordsExist()) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Creates a session entry into the database and on the client machine
-     * @param type $userid
-     * @return int
-     */
-    function buildSID($userid) {
-        $sid = $this->generateRandID(16);
-        $timestamp = $this->buildExpireTime();
-
-        $qry = $this->qb->start();
-        $qry->insert_into("sessions", array('userid' => $userid, 'sid' => $sid, 'timestamp' => $timestamp));
-        if ($qry->exec()) {
-            $_SESSION['sid'] = $sid;
-            return 1;
-        }
-        return 0;
-    }
-
-    function buildExpireTime() {
-        return time() + 60 * SESSION_LENGTH;
-    }
-
-    /**
-     * Is a user logged in?
-     * @return type
-     */
-    function isLoggedIn() {
-        return isset($_SESSION['sid']);
-    }
-
     /**
      * Returns the UID based on email/sid input
      * Determines input type no specification required
+     * @author Mitchell M.
      * @param type $input
      * @return type
+     * @version 1.2.0
      */
     function getUID($input) {
         $qry = $this->qb->start();
@@ -244,31 +293,23 @@ class Session {
     }
 
     /**
-     * Clear session based on UserID
-     * @param type $userid
-     * @return boolean
+     * Is a user logged in?
+     * @author Mitchell M.
+     * @return type
+     * @version 1.0.0
      */
-    function clearByUID($userid) {
-        if ($this->mysqli->query("DELETE FROM sessions WHERE userid='{$userid}'")) {
-            return true;
-        } else {
-            return $this->mysqli->error;
-        }
-        unset($_SESSION['sid']);
+    function isLoggedIn() {
+        return isset($_SESSION['sid']);
     }
 
     /**
-     * Clear session based on SID
-     * @param type $sid
+     * END USER MANAGEMENT FUNCTIONS
+     * BEGIN TASK MANAGEMENT FUNCTIONS
      */
-    function clear($sid) {
-        $sid = mysqli_real_escape_string($this->mysqli, $sid);
-        $this->mysqli->query("DELETE FROM sessions WHERE sid='{$sid}'");
-        unset($_SESSION['sid']);
-    }
 
     /**
      * Validates and adds a new task to the database
+     * @author Mitchell M.
      * @author Brett M.
      * @version 1.0
      */
@@ -290,7 +331,9 @@ class Session {
     }
 
     /**
-     * Gets the tasks of the userid
+     * Gets the tasks a specific user, based on userid
+     * @author Mitchell M.
+     * @version 1.0.0
      */
     public function getTasks($userid) {
         $tasks = null;
@@ -306,17 +349,39 @@ class Session {
         return $tasks;
     }
 
+    /**
+     * Edits specific task based on task id
+     * @param type $taskid
+     * @param type $title
+     * @param type $due
+     * @param type $datetc
+     * @param type $hourtc
+     * @param type $minutetc
+     * @param type $location
+     * @param type $notes
+     */
     public function editTask($taskid, $title, $due, $datetc, $hourtc, $minutetc, $location, $notes) {
         //TODO
     }
 
+    /**
+     * Deletes specific task based on task id
+     * @param type $taskid
+     */
     public function deleteTask($taskid) {
         //TODO
     }
 
     /**
-     * Redirects the the specified location
+     * END TASK MANAGEMENT FUNCTIONS
+     * BEGIN UTILITY FUNCTIONS
+     */
+
+    /**
+     * Redirects the the specified location, if headers already sent and can't do with PHP it will do it with javascript.
      * @param string $location to redirect to
+     * @author Mitchell M.
+     * @version 1.0.0
      */
     function redirect($location) {
         if (!headers_sent())
@@ -335,6 +400,8 @@ class Session {
     /**
      * Generates a random string based on the length provided
      * @param int $length to use
+     * @author Mitchell M.
+     * @version 1.0.0
      */
     function generateRandID($length) {
         $randstr = "";
@@ -351,6 +418,9 @@ class Session {
         return $randstr;
     }
 
+    /*
+     * END UTILITY FUNCTIONS
+     */
 }
 
 ?>
