@@ -1,5 +1,4 @@
 <?php
-
 require_once "base.php";
-$session->addTask($task, $due, $datetc, $hourtc, $minutetc, $location, $notes);
+echo $session->addTask($task, $due, $datetc, $hourtc, $minutetc, $location, $notes) ? "1" : "0";
 ?>

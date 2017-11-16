@@ -23,7 +23,7 @@ $session = new Session($db);
 <html>
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="./js/forms.js"></script>
+        <script src="./js/main.js"></script>
         <style type="text/css">
             .form {
                 border: 1px solid black;
@@ -188,5 +188,20 @@ $session = new Session($db);
         <div class="form">
             Are you logged in?: [<?php echo $session->isLoggedIn() ? "Yes, <a href=\"#\"id=\"logout\">>LOGOUT<</a>" : "No"; ?>]
         </div>
+        <?php
+        if ($session->isLoggedIn()) {
+            ?>
+            <div class="form">
+                Array dump of all of your tasks
+                <pre>
+                    <?php
+                    $tasks = $session->getTasks($session->getUID($session->sid));
+                    echo var_dump($tasks);
+                    ?>
+                </pre>
+            </div>
+            <?php
+        }
+        ?>
     </body>
 </html>

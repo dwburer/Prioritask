@@ -1,10 +1,10 @@
 $(function () {
-    var pathToHandler = "./../api/";
+    var api = "./../api/";
     $("a#logout").on("click", function (e) {
         $.ajax({
             type: 'POST',
             data: 'request=logout&r=t',
-            url: pathToHandler + 'index.php',
+            url: api + 'index.php',
             async: true,
             success: function (response) {
                 document.location.href = "index.php";
@@ -34,11 +34,15 @@ $(function () {
             data: 'request=addTask&task=' + task + '&due='
                     + due + '&datetc=' + datetc + '&hourtc=' + hourtc + '&minutetc='
                     + minutetc + '&location=' + location + '&notes=' + notes,
-            url: pathToHandler + 'index.php',
+            url: api + 'index.php',
             async: true,
             success: function (data) {
                 //success
-                form.append('<br />' + data);
+                if (data == 1)
+                    form.append('<br />Task added, click <a href=\"index.php\">here</a> to reload');
+                else
+                    form.append('Failed to post task due to some reason! Try cleaning up your inputs,\n\
+                                <br/>click <a href=\"index.php\">here</a> to reload')
             },
             error: function () {
                 alert("an error has occured!");
@@ -58,7 +62,7 @@ $(function () {
         $.ajax({
             type: 'POST',
             data: 'request=login&email=' + email + '&password=' + password,
-            url: pathToHandler + 'index.php',
+            url: api + 'index.php',
             async: true,
             success: function (data) {
                 //success
@@ -83,7 +87,7 @@ $(function () {
         $.ajax({
             type: 'POST',
             data: 'request=register&email=' + email + '&password=' + password + '&passwordconf=' + passwordc,
-            url: pathToHandler + 'index.php',
+            url: api + 'index.php',
             async: true,
             success: function (data) {
                 //success

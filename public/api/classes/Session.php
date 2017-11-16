@@ -14,7 +14,7 @@ require_once __DIR__ . '/../config/global.php';
 class Session {
 
     private static $self_instance;
-    public $last_error;
+    public $sid;
     private $mysqli, $qb;
 
     /**
@@ -288,6 +288,31 @@ class Session {
             }
             return false;
         }
+    }
+
+    /**
+     * Gets the tasks of the userid
+     */
+    public function getTasks($userid) {
+        $tasks = null;
+        $stmt = $this->mysqli->prepare("SELECT `task_name`, `when_due`, `time_to_complete`, `notes`, `location` FROM `task`");
+        $stmt->bind_result($title, $due, $tc, $notes, $location);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows >= 1) {
+            while ($stmt->fetch()) {
+                $tasks[] = array('title' => $title, 'due' => $due, 'tc' => $tc, 'notes' => $notes, 'location' => $location);
+            }
+        }
+        return $tasks;
+    }
+
+    public function editTask($taskid, $title, $due, $datetc, $hourtc, $minutetc, $location, $notes) {
+        //TODO
+    }
+
+    public function deleteTask($taskid) {
+        //TODO
     }
 
     /**
