@@ -276,6 +276,25 @@ class Session {
     public function addTask($email, $pass, $title, $duration, $due, $desc) {
         
     }
+   
+    /**
+     * Redirects the the specified location
+     * @param string $location to redirect to
+     */
+    function redirect($location) {
+        if (!headers_sent())
+            header('Location: ' . $location);
+        else {
+            echo '<script type="text/javascript">';
+            echo 'window.location.href="' . $location . '";';
+            echo '</script>';
+            echo '<noscript>';
+            echo '<meta http-equiv="refresh" content="0;url=' . $location . '" />';
+            echo '</noscript>';
+        }
+        die();
+    }
+    
     /**
      * Generates a random string based on the length provided
      * @param int $length to use

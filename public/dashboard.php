@@ -1,4 +1,5 @@
 <?php include 'templates/header.php'; ?>
+<?php include 'templates/require_login.php'; ?>
 <h1>Dashboard</h1>
 
 <div class="card-list">
@@ -9,5 +10,4 @@
 		<a href="edit_task.php" class="btn btn-primary mx-auto">Add a task</a>
 	</div>
 </div>
-
 <?php include 'templates/footer.php'; ?>
