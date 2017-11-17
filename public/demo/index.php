@@ -4,6 +4,7 @@
  * @author Mitchell M.
  * @version 1.0.0
  */
+
 /**
  * Loading all the required classes/configuration files first
  */
@@ -18,6 +19,7 @@ function __autoload($class_name) {
  */
 $db = Database::getConnection();
 $session = new Session($db);
+
 ?>
 <!DOCTYPE html>
 <html>

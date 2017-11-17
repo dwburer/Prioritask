@@ -8,6 +8,9 @@ function __autoload($class_name) {
 
 $db = Database::getConnection();
 $session = new Session($db);
+
 if (!$session->isLoggedIn()) {
     $session->redirect("index.php");
 }
+
+?>

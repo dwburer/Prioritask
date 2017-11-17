@@ -151,6 +151,8 @@
         transform: rotate(126deg);
     }
 }
-@media only screen and (max-width: 990px){
+
+/*@media only screen and (max-width: 990px){
     .progress{ margin-bottom: 20px; }
 }
+*/
