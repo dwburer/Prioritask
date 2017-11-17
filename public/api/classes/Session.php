@@ -337,7 +337,8 @@ class Session {
      */
     public function getTasks($userid) {
         $tasks = null;
-        $stmt = $this->mysqli->prepare("SELECT `task_name`, `when_due`, `time_to_complete`, `notes`, `location` FROM `task`");
+        $stmt = $this->mysqli->prepare("SELECT `task_name`, `when_due`, `time_to_complete`, `notes`, `location` FROM `task` WHERE `userid` = ?");
+		$stmt->bind_param("i", $userid);
         $stmt->bind_result($title, $due, $tc, $notes, $location);
         $stmt->execute();
         $stmt->store_result();

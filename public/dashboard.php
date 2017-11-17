@@ -12,17 +12,17 @@ $has_tasks = count($tasks) > 0;
 	<h1>Dashboard</h1>
 
 	<div class="card-list">
-		<?php if($has_tasks) {?>
-
+            
 			<!-- Button trigger modal -->
 			<div class="add-card-button mb-3">
 			    <div class="col row">
+				</div>
+			</div>
+		<?php if($has_tasks) {?>
+
 					<button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#taskModal">
 				  		<?=($has_tasks ? 'Add a new task' : 'Add a task')?>
 					</button>
-				</div>
-			</div>
-
         	<?php 
 
 			include 'templates/card.php';
@@ -40,7 +40,10 @@ $has_tasks = count($tasks) > 0;
 	<?php if(!$has_tasks) {?>
 		<div class="add-card-button">
 		    <div class="col row">
-		        <a href="edit_task.php" class="btn btn-primary mx-auto"><?=($has_tasks ? 'Add a new task' : 'Add a task')?></a>
+		        
+					<button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#taskModal">
+				  		<?=($has_tasks ? 'Add a new task' : 'Add a task')?>
+					</button>
 		    </div>
 		</div>
 	<?php } ?>
