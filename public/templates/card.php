@@ -1,5 +1,5 @@
 <?php function renderTask ($task) { ?>
-    <div class="card">
+    <div class="card mb-5">
 
         <!-- Displays the task's title -->
         <div class="card-header"><?=$task['title']?></div>
