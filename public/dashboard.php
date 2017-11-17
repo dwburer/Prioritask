@@ -26,7 +26,7 @@ $has_tasks = count($tasks) > 0;
         	<?php 
 
 			include 'templates/card.php';
-        	foreach ( $tasks as $task ) {
+        	foreach ( array_reverse($tasks) as $task ) {
     			renderTask($task);
         	}
 
@@ -46,7 +46,7 @@ $has_tasks = count($tasks) > 0;
 	<?php } ?>
 
 	<!-- Modal -->
-	<div class="modal fade" id="confimationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+	<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -134,7 +134,7 @@ $has_tasks = count($tasks) > 0;
 	        var hourtc = form.find('input#taskEstHours').val();
 	        var minutetc = form.find('input#taskEstMinutes').val();
 	        var location = form.find('input#taskLocation').val();
-	        var notes = form.find('input#taskNotes').val();
+	        var notes = form.find('textarea#taskNotes').val();
 
 	        $.ajax({
 	            type: 'POST',

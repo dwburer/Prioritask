@@ -19,12 +19,12 @@
                 <label for="password">Confirm Password:</label>
                 <input type="password" class="form-control" id="passwordconf">
             </div>
-            <div class="row no-gutters pt-md-4">
+            <div class="row pt-md-4">
                 <div class="col">
-                    <button id="login-button" type="button" style="width: 15rem;" class="btn btn-primary btn-block float-left">Login</button>
+                    <button id="login-button" type="button" class="btn btn-primary btn-block float-left">Login</button>
                 </div>
                 <div class="col">
-                    <button id="register-button" type="button" style="width: 15rem;" class="btn btn-secondary btn-block float-right">Register</button>
+                    <button id="register-button" type="button" class="btn btn-secondary btn-block float-right">Register</button>
                 </div>
             </div>
         </div>
