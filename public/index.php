@@ -11,15 +11,15 @@
                 <label for="email">Email:</label>
                 <input type="text" class="form-control" id="email">
             </div>
-            <div class="row no-gutters pt-md-2">
+            <div class="row no-gutters pt-2">
                 <label for="password">Password:</label>
                 <input type="password" class="form-control" id="password">
             </div>
-            <div id="regfield" class="row no-gutters pt-md-2">
+            <div id="regfield" class="row no-gutters pt-2">
                 <label for="password">Confirm Password:</label>
                 <input type="password" class="form-control" id="passwordconf">
             </div>
-            <div class="row pt-md-4">
+            <div class="row pt-4">
                 <div class="col">
                     <button id="login-button" type="button" class="btn btn-primary btn-block float-left">Login</button>
                 </div>
