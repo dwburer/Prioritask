@@ -1,4 +1,5 @@
 <?php
+
 require_once "base.php";
-echo $session->getTasks($userid);
+echo "Passed data: `" . $title . "` & `" . $duration . "` & `" . $due . "` & `" . $desc . "`";
 ?>
