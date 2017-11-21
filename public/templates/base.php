@@ -16,6 +16,8 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        
         <link href="css/main.css" rel="stylesheet">
         <link href="css/dashboard.css" rel="stylesheet">
         <link href="css/card.css" rel="stylesheet">
@@ -48,7 +50,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.js" crossorigin="anonymous"></script>
 
         <script src="js/vendor/modernizr-3.5.0.min.js"></script>
-
+        <script src="js/vendor/moment.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        
         <!-- Our Custom JS -->
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>

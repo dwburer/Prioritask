@@ -36,15 +36,12 @@
     <script type="text/javascript">
         $(function () {
             $("div#regfield").hide();
-
             // Checking if user is logged in then redirecting them to the dashboard if they are
-            var api = "./api/";
-
             // jQuery ajax call to the api
             $.ajax({
                 type: 'POST',
                 data: 'request=checklogin',
-                url: api + 'index.php',
+                url: '<?php echo API_URL . 'index.php'?>',
                 async: true,
                 success: function (response) {
                     //If api returns 1

@@ -11,7 +11,7 @@
         $.ajax({
             type: 'POST',
             data: 'request=logout',
-            url: '<?php echo API_URL ?>' + 'index.php',
+            url: '<?php echo API_URL . 'index.php'?>',
             async: true,
             success: function (response) {
                 document.location.href = '<?php echo BASE_URL ?>';

@@ -12,41 +12,25 @@ $has_tasks = count($tasks) > 0;
 	<h1>Dashboard</h1>
 
 	<div class="card-list">
-            
-			<!-- Button trigger modal -->
-			<div class="add-card-button mb-3">
-			    <div class="col row">
-				</div>
-			</div>
-		<?php if($has_tasks) {?>
-
-					<button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#taskModal">
-				  		<?=($has_tasks ? 'Add a new task' : 'Add a task')?>
-					</button>
-        	<?php 
-
-			include 'templates/card.php';
-        	foreach ( array_reverse($tasks) as $task ) {
-    			renderTask($task);
-        	}
-
-        	?>
-
-        <?php } else {?>
-	    	<h5 class="getting-started pb-4">Looks like you don't have any task cards yet!  Click the 'Add a task' button to get started!</h5>
-	    <?php } ?>
+        <!-- Button trigger modal -->
+        <div class="add-card-button mb-3">
+            <div class="row justify-content-center">
+                <div class="col col-auto">
+                    <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#taskModal">
+                        <?=($has_tasks ? 'Add a new task' : 'Add a task')?>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="loader-container" id="loader" <?php if(!$has_tasks) {?>style="display: none;"<?php } ?>>
+            <div class="loader">Loading...</div>
+        </div>
+        <div id="task-list-wrapper">
+            <?php if(!$has_tasks) {?>
+                <h5 class="getting-started pb-4">Looks like you don't have any task cards yet!  Click the 'Add a task' button to get started!</h5>
+            <?php } ?>
+        </div>
 	</div>
-
-	<?php if(!$has_tasks) {?>
-		<div class="add-card-button">
-		    <div class="col row">
-		        
-					<button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#taskModal">
-				  		<?=($has_tasks ? 'Add a new task' : 'Add a task')?>
-					</button>
-		    </div>
-		</div>
-	<?php } ?>
 
 	<!-- Modal -->
 	<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
@@ -87,7 +71,7 @@ $has_tasks = count($tasks) > 0;
 					  </div>
 					  <div class="form-group">
 					    <label for="taskDueDate">Due date</label>
-					    <input type="datetime-local" class="form-control" id="taskDueDate">
+                        <input class="flatpickr flatpickr-input active form-control" id="taskDueDate" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
 					  </div>
 					  <div class="form-group">
 					    <label for="taskEstDays">Est. days to complete:</label>
@@ -128,6 +112,21 @@ $has_tasks = count($tasks) > 0;
 <?php startblock('footer_js') ?>
 <script type="text/javascript">
 	(function ($) {
+        
+        var taskContainer = $('#task-list-wrapper');
+        var loaderContainer = $('#loader');
+        
+        $(document).ready(function() {
+            $('#taskDueDate').flatpickr({
+                enableTime: true
+            });
+            
+            $.get('<?php echo BASE_URL . 'task_list.php' ?>', function (data) {
+                taskContainer.html(data);
+                loaderContainer.hide();
+            });            
+        });
+        
 		$('form#task').submit(function (e) {
 	        e.preventDefault();
 	        var form = $(this);
@@ -144,7 +143,7 @@ $has_tasks = count($tasks) > 0;
 	            data: 'request=addTask&task=' + task + '&due='
 	                    + due + '&datetc=' + datetc + '&hourtc=' + hourtc + '&minutetc='
 	                    + minutetc + '&location=' + location + '&notes=' + notes,
-	            url: '<?php echo API_URL ?>' + 'index.php',
+	            url: '<?php echo API_URL . 'index.php'?>',
 	            async: true,
 	            success: function (data) {
 	                //success
@@ -162,8 +161,14 @@ $has_tasks = count($tasks) > 0;
 	    });
 
 	    $('#confirmationModal').on('hidden.bs.modal', function (e) {
-	    	// Refresh the page for now. TODO: implement dynamic reloading of task list.
-			location.reload();
+            
+            taskContainer.empty();
+            loaderContainer.show();
+            
+	    	$.get('<?php echo BASE_URL . 'task_list.php' ?>', function (data) {
+                taskContainer.html(data);
+                loaderContainer.hide();
+            }); 
 		})
 	})(jQuery)
 </script>
