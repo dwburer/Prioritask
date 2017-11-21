@@ -58,13 +58,15 @@
         </div>
         <div class="card-footer">
             <?php
-                $to_time = strtotime(date("Y-m-d H:i:s"));
-                $from_time = strtotime($task['due']);
-                $time_remaining = round(abs($to_time - $from_time) / 60, 2). " minutes";
-                                   
-                $tc_splits = explode(":", $task['tc']);
-                $minutes_to_complete = (intval($tc_splits[0]) * 24 * 60) + (intval($tc_splits[1]) * 60) + intval($tc_splits[2]); 
-                $urgency = $minutes_to_complete / $time_remaining;
+
+            $to_time = strtotime(date("Y-m-d H:i:s"));
+            $from_time = strtotime($task['due']);
+            $time_remaining = round(abs($to_time - $from_time) / 60, 2). " minutes";
+                               
+            $tc_splits = explode(":", $task['tc']);
+            $minutes_to_complete = (intval($tc_splits[0]) * 24 * 60) + (intval($tc_splits[1]) * 60) + intval($tc_splits[2]); 
+            $urgency = $minutes_to_complete / $time_remaining;
+            
             ?>
             <p><i>TODO: visually indicate these metrics (urgency) in the with the card formatting/styling</i></p>
             <p>Time remaining from today until due date (minutes): <?=$time_remaining?></p>
