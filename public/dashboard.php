@@ -150,7 +150,8 @@ $has_tasks = count($tasks) > 0;
                         $('#taskModal').modal('hide');
                         $('#confirmationModal').modal('show');
                     } else {
-                        debugger;
+                        console.log('Could not submit task.');
+                        console.log(data);
                     }
                 },
                 error: function () {
