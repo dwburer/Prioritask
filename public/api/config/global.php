@@ -11,4 +11,6 @@ define('DB_USER', 'project');
 define('DB_PASS', '1231234');
 define('DB_NAME', 'prioritask');
 define('SESSION_LENGTH', 60);
+error_reporting(E_ALL & ~E_NOTICE);
+
 ?>

@@ -7,7 +7,6 @@
 <?php startblock('footer_js') ?>
 <script type="text/javascript">
     (function ($) {
-        // jQuery ajax call to the api
         $.ajax({
             type: 'POST',
             data: 'request=logout',

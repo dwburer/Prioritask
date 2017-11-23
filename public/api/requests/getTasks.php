@@ -1,5 +1,11 @@
 <?php
 
 require_once "base.php";
-echo "Passed data: `" . $title . "` & `" . $duration . "` & `" . $due . "` & `" . $desc . "`";
+
+
+$tasks = $session->getTasks($session->getUID($session->sid));
+include '../includes/card.php';
+foreach ( array_reverse($tasks) as $task ) {
+    renderTask($task);
+}
 ?>

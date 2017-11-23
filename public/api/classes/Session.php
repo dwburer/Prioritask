@@ -337,14 +337,16 @@ class Session {
      */
     public function getTasks($userid) {
         $tasks = null;
-        $stmt = $this->mysqli->prepare("SELECT `task_name`, `when_due`, `time_to_complete`, `notes`, `location` FROM `task` WHERE `userid` = ?");
+        $stmt = $this->mysqli->prepare("SELECT `taskid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`,`completed` FROM `task` WHERE `userid` = ?");
 		$stmt->bind_param("i", $userid);
-        $stmt->bind_result($title, $due, $tc, $notes, $location);
+        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location,$completed);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows >= 1) {
             while ($stmt->fetch()) {
-                $tasks[] = array('title' => $title, 'due' => $due, 'tc' => $tc, 'notes' => $notes, 'location' => $location);
+                $tasks[] = array('taskid' => $taskid, 'title' => $title, 'due' => $due
+                        , 'tc' => $tc, 'notes' => $notes, 'location' => $location
+                        ,'completed'=>$completed);
             }
         }
         return $tasks;
