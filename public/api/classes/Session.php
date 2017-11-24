@@ -338,15 +338,15 @@ class Session {
     public function getTasks($userid) {
         $tasks = null;
         $stmt = $this->mysqli->prepare("SELECT `taskid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`,`completed` FROM `task` WHERE `userid` = ?");
-		$stmt->bind_param("i", $userid);
-        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location,$completed);
+        $stmt->bind_param("i", $userid);
+        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location, $completed);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows >= 1) {
             while ($stmt->fetch()) {
                 $tasks[] = array('taskid' => $taskid, 'title' => $title, 'due' => $due
-                        , 'tc' => $tc, 'notes' => $notes, 'location' => $location
-                        ,'completed'=>$completed);
+                    , 'tc' => $tc, 'notes' => $notes, 'location' => $location
+                    , 'completed' => $completed);
             }
         }
         return $tasks;
@@ -373,6 +373,16 @@ class Session {
      */
     public function deleteTask($taskid) {
         //TODO
+    }
+    
+    public function completeTask($taskid) {
+        $stmt = $this->mysqli->prepare("UPDATE `task` SET `completed` = 1 WHERE `taskid` = ?");
+        $stmt->bind_param("i",$taskid);
+        $res = $stmt->execute();
+        if($this->mysqli->affected_rows >= 0) {
+            return true;
+        }
+        return false;
     }
 
     /**

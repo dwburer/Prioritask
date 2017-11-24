@@ -34,7 +34,7 @@ function renderTask($task) { ?>
                                 Due on:
                             </p>
                             <p class="card-due-on text-muted mb-0">
-    <?= $task['due'] ?>
+                                    <?= $task['due'] ?>
                             </p>
                         </div>
                         <div class="col">
@@ -50,13 +50,13 @@ function renderTask($task) { ?>
                     <div class="row justify-content-between">
                         <div class="col col-sm-auto">
                             <?php if ($task['completed'] > 0) { ?>
-                                <a href="#" class="btn btn-primary">Completed</a>
+                                <a href="#" taskid="<?= $task['taskid'] ?>" class="btn btn-primary">Completed</a>
                             <?php } else { ?>
-                                <a href="#" id="markcomplete" class="btn btn-primary">Mark as complete</a>
+                                <a href="#" taskid="<?= $task['taskid'] ?>" id="markcomplete" class="btn btn-primary">Mark as complete</a>
                             <?php } ?>
                         </div>
                         <div class="col col-sm-auto">
-                            <a href="#" class="btn btn-secondary">Edit</a>
+                            <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#editModal<?=$task['taskid']?>">Edit</a>
                         </div>
                     </div>
                 </div>
@@ -81,4 +81,60 @@ function renderTask($task) { ?>
             </div>
         </div>
     </div>
+
+<!-- Modal -->
+<div class="modal fade" id="editModal<?=$task['taskid']?>" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="task">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit task:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="taskTitle">Title</label>
+                        <input type="text" class="form-control" id="taskTitle" aria-describedby="titleHelp" value="<?= $task['title'] ?>">
+                        <small id="titleHelp" class="form-text text-muted">The title for your task.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDueDate">Due date</label>
+                        <input class="flatpickr flatpickr-input active form-control" id="taskDueDate" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskEstDays">Est. days to complete:</label>
+                        <input type="number" class="form-control" id="taskEstDays">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskEstHours">Est. hours to complete:</label>
+                        <input type="number" class="form-control" id="taskEstHours">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskEstMinutes">Est. minutes to complete:</label>
+                        <input type="number" class="form-control" id="taskEstMinutes">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskLocation">Location</label>
+                        <input type="text" class="form-control" id="taskLocation" value="<?= $task['location'] ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputFile">Image</label>
+                        <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+                        <small id="fileHelp" class="form-text text-muted">Add an optional image for this task.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskNotes">Notes</label>
+                        <textarea class="form-control" id="taskNotes" rows="3"><?= $task['notes'] ?></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <?php } ?>

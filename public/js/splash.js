@@ -40,33 +40,32 @@ $("a#logout").on("click", function (e) {
     });
 });
 
-$('#login-button').on('click',
-        function (event)
-        {
-            if (formState === 1) {
-                swapState();
-                return;
+$('#login-button').on('click', function (e) {
+    if (formState === 1) {
+        swapState();
+        return;
+    }
+    let email = $('input#email').val();
+    let password = $('input#password').val();
+    alert("HELLO");
+    $.ajax({
+        type: "POST",
+        data: 'request=login&email=' + email + '&password=' + password,
+        url: 'api/index.php',
+        async: true,
+        success: function (data) {
+            if (data == true) {
+                //LOGIN WAS SUCCESSFUL, REDIRECT TO DASH
+                document.location.href = 'dashboard.php';
+            } else {
+                alert(data);
             }
-            let email = $('input#email').val();
-            let password = $('input#password').val();
-            $.ajax({
-                type: "POST",
-                data: 'request=login&email=' + email + '&password=' + password,
-                url: 'api/index.php',
-                async: true,
-                success: function (data) {
-                    if (data == true) {
-                        //LOGIN WAS SUCCESSFUL, REDIRECT TO DASH
-                        document.location.href = 'dashboard.php';
-                    } else {
-                        alert(data);
-                    }
-                },
-                error: function (data) {
-                    console.log('Login error!: ' + data);
-                }
-            });
-        });
+        },
+        error: function (data) {
+            console.log('Login error!: ' + data);
+        }
+    });
+});
 
 $("#register-button").on("click", function () {
     if (formState === 0) {

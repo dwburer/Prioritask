@@ -15,7 +15,7 @@ $has_tasks = count($tasks) > 0;
         <div class="row justify-content-center">
             <div class="col col-auto">
                 <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#taskModal">
-<?= ($has_tasks ? 'Add a new task' : 'Add a task') ?>
+                    <?= ($has_tasks ? 'Add a new task' : 'Add a task') ?>
                 </button>
             </div>
         </div>
@@ -24,7 +24,7 @@ $has_tasks = count($tasks) > 0;
         <div class="loader">Loading...</div>
     </div>
     <div id="task-list-wrapper">
-<?php if (!$has_tasks) { ?>
+        <?php if (!$has_tasks) { ?>
             <h5 class="getting-started pb-4">Looks like you don't have any task cards yet!  Click the 'Add a task' button to get started!</h5>
         <?php } ?>
     </div>
@@ -113,7 +113,7 @@ $has_tasks = count($tasks) > 0;
         var taskContainer = $('#task-list-wrapper');
         var loaderContainer = $('#loader');
 
-        $(document).ready(function () {
+        $(document).ready(function () {            
             $('#taskDueDate').flatpickr({
                 enableTime: true
             });
@@ -177,7 +177,29 @@ $has_tasks = count($tasks) > 0;
                 taskContainer.html(data);
                 loaderContainer.hide();
             });
-        })
+        });
+        
+        $("div.container").on("click","#markcomplete", function () {
+            var taskid = $(this).attr('taskid');
+            $.ajax({
+                type: "POST",
+                data: 'request=completeTask&taskid=' + taskid,
+                url: 'api/index.php',
+                async: true,
+                success: function (data) {
+                    //user registered and set as logged in!
+                    if (data == 1) {
+                        $("a#markcomplete").html("Completed").remove('id');
+                    } else {
+                        alert("Couldn't mark task completed in database!");
+                    }
+                },
+                error: function (data) {
+                    console.log('Login error!: ' + data);
+                }
+            });
+        });
+
     })(jQuery)
 </script>
 <?php endblock() ?>

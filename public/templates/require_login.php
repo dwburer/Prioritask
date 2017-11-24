@@ -10,7 +10,7 @@ $db = Database::getConnection();
 $session = new Session($db);
 
 if (!$session->isLoggedIn()) {
-    $session->redirect("index.php");
+    //$session->redirect("index.php");
 }
 
 ?>
