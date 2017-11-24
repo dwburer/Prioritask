@@ -88,11 +88,6 @@ $has_tasks = count($tasks) > 0;
                         <input type="text" class="form-control" id="taskLocation">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputFile">Image</label>
-                        <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-                        <small id="fileHelp" class="form-text text-muted">Add an optional image for this task.</small>
-                    </div>
-                    <div class="form-group">
                         <label for="taskNotes">Notes</label>
                         <textarea class="form-control" id="taskNotes" rows="3"></textarea>
                     </div>
@@ -113,7 +108,7 @@ $has_tasks = count($tasks) > 0;
         var taskContainer = $('#task-list-wrapper');
         var loaderContainer = $('#loader');
 
-        $(document).ready(function () {            
+        $(document).ready(function () {
             $('#taskDueDate').flatpickr({
                 enableTime: true
             });
@@ -125,8 +120,10 @@ $has_tasks = count($tasks) > 0;
                 async: true,
                 success: function (data) {
                     //success
-                    taskContainer.html(data);
-                    loaderContainer.hide();
+                    if (data != "") {
+                        taskContainer.html(data);
+                        loaderContainer.hide();
+                    }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     showResultFailed(jqXHR.responseText);
@@ -160,7 +157,6 @@ $has_tasks = count($tasks) > 0;
                         $('#confirmationModal').modal('show');
                     } else {
                         console.log('Could not submit task.');
-                        console.log(data);
                     }
                 },
                 error: function () {
@@ -178,8 +174,8 @@ $has_tasks = count($tasks) > 0;
                 loaderContainer.hide();
             });
         });
-        
-        $("div.container").on("click","#markcomplete", function () {
+
+        $("div.container").on("click", "#markcomplete", function () {
             var taskid = $(this).attr('taskid');
             $.ajax({
                 type: "POST",
@@ -196,6 +192,32 @@ $has_tasks = count($tasks) > 0;
                 },
                 error: function (data) {
                     console.log('Login error!: ' + data);
+                }
+            });
+        });
+
+        $(document).on("submit", "form#edittask", function () {
+            var form = $(this);
+            var title = form.find('input#taskTitle').val();
+            var due = form.find('input#taskDueDate').val();
+            var datetc = form.find('input#taskEstDays').val();
+            var hourtc = form.find('input#taskEstHours').val();
+            var minutetc = form.find('input#taskEstMinutes').val();
+            var location = form.find('input#taskLocation').val();
+            var notes = form.find('textarea#taskNotes').val();
+            var taskid = form.find('input#taskid').val();
+            $.ajax({
+                type: 'POST',
+                data: 'request=editTask&taskid='+taskid+'&task=' + title + '&due='
+                        + due + '&datetc=' + datetc + '&hourtc=' + hourtc + '&minutetc='
+                        + minutetc + '&location=' + location + '&notes=' + notes,
+                url: '<?php echo API_URL . 'index.php' ?>',
+                async: true,
+                success: function (data) {
+                    alert(data);
+                },
+                error: function () {
+                    alert("an error has occured!");
                 }
             });
         });

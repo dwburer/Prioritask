@@ -9,7 +9,3 @@ if (!is_null($tasks)) {
     }
 }
 ?>
-<html>
-    <script type="text/javascript">
-    </script>
-</html>

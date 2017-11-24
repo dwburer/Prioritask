@@ -195,16 +195,21 @@ class Session {
     public function register($email, $password, $passwordconf) {
         $pass = md5($password);
         $passconf = md5($passwordconf);
-        if (!$email)
+        if (!$email) {
             $errors[] = "Email is not defined!";
-        if (!$pass)
+        }
+        if (!$pass) {
             $errors[] = "Password is not defined!";
-        if (!$passconf)
+        }
+        if (!$passconf) {
             $errors[] = "Password confirmation is not defined!";
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) == false)
+        }
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) {
             $errors[] = "Email address is invalid!";
-        if ($passconf != $pass)
+        }
+        if ($passconf != $pass) {
             $errors[] = "The two passwords you entered do not match!";
+        }
         if ($email) {
             $stmt = $this->mysqli->prepare("SELECT * FROM `users` WHERE `email`= ?");
             $stmt->bind_param("s", $email);
@@ -319,9 +324,9 @@ class Session {
             $tc = $datetc . ":" . $hourtc . ":" . $minutetc;
             $uid = $this->getUid($this->sid);
             $stmt = $this->mysqli->prepare("INSERT INTO `task` "
-                    . "(`userid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`) "
-                    . "VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("isssss", $uid, $title, $due, $tc, $notes, $location);
+                    . "(`userid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`, `dc`, `hc`, `mc`) "
+                    . "VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)");
+            $stmt->bind_param("isssssiii", $uid, $title, $due, $tc, $notes, $location,$datetc,$hourtc,$minutetc);
             if ($stmt->execute()) {
                 $stmt->close();
                 return true;
@@ -331,22 +336,22 @@ class Session {
     }
 
     /**
-     * Gets the tasks a specific user, based on userid
+     * Gets the tasks a specific user, based on userid and puts it into an array
      * @author Mitchell M.
      * @version 1.0.0
      */
     public function getTasks($userid) {
         $tasks = null;
-        $stmt = $this->mysqli->prepare("SELECT `taskid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`,`completed` FROM `task` WHERE `userid` = ?");
+        $stmt = $this->mysqli->prepare("SELECT `taskid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`,`completed`,`dc`,`hc`,`mc` FROM `task` WHERE `userid` = ?");
         $stmt->bind_param("i", $userid);
-        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location, $completed);
+        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location, $completed,$dc,$hc,$mc);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows >= 1) {
             while ($stmt->fetch()) {
                 $tasks[] = array('taskid' => $taskid, 'title' => $title, 'due' => $due
                     , 'tc' => $tc, 'notes' => $notes, 'location' => $location
-                    , 'completed' => $completed);
+                    , 'completed' => $completed, 'dc' => $dc, 'hc' => $hc, 'mc' => $mc);
             }
         }
         return $tasks;
@@ -354,6 +359,7 @@ class Session {
 
     /**
      * Edits specific task based on task id
+     * Utilizes query builder class for a more modular composition
      * @param type $taskid
      * @param type $title
      * @param type $due
@@ -363,8 +369,41 @@ class Session {
      * @param type $location
      * @param type $notes
      */
-    public function editTask($taskid, $title, $due, $datetc, $hourtc, $minutetc, $location, $notes) {
-        //TODO
+    public function editTask($taskid, $title, $due, $dc, $hc, $mc, $location, $notes) {
+        if ($this->isLoggedIn()) {
+            //puts the est. completion time together
+            $qry = $this->qb->start();
+            $qry->update("task")->set("task_name", $title)->set("location", $location)->set("notes", $notes);
+            if($due != "") {
+                $qry->set("when_due", $due);
+            }
+            //Split these parts of the next conditonal
+            // into variables for eaier debugging to see what was broken 
+            // -- fixed now but going to leave like this cus lazy
+            $a = ($hc != "" && $dc != "" && $mc != "");
+            $b = intval($hc) && intval($dc) && intval($mc);
+            $c = ($hc+$dc+$mc) > 0;
+            
+            //if proper hour, day and minute submitted
+            if( $a && $b && $c) {
+                $tc = $dc . ":" . $hc . ":" . $mc;
+                $qry->set("dc", $dc);
+                $qry->set("hc", $hc);
+                $qry->set("mc", $mc);
+                $qry->set("time_to_complete", $tc);
+            }
+            $qry->where("taskid", "=", $taskid);
+//            $stmt = $this->mysqli->prepare("UPDATE `task` "
+//                    . "SET `task_name` = ?, `when_due` = ?, `time_to_complete` = ?, "
+//                    . "`notes` = ?, `location` = ?, `dc` = ?, `hc` = ?, `mc` = ? "
+//                    . "WHERE `taskid` = ?");
+//            $stmt->bind_param("sssssiiii", $title,$due,$tc,$notes,$location,$dc,$hc,$mc,$taskid);
+            if ($qry->exec()) {
+                return true;
+            }
+            echo $this->qb->lastError();
+            return false;
+        }
     }
 
     /**

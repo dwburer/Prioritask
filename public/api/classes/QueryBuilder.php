@@ -21,7 +21,7 @@ class QueryBuilder {
     private $query;
     private $state;
     private $db;
-    private $firstWhere;
+    private $firstWhere, $firstSet;
     private $qryType;
 
     /**
@@ -138,7 +138,12 @@ class QueryBuilder {
         $toVal = $this->clean($toVal);
         if ($this->state > 0 && $this->qryType == "UPDATE") {
             if (!is_array($column) && !is_array($toVal)) {
-                $this->query .= "SET `" . $column . "` = '" . $toVal . "' ";
+                if (!$this->firstSet) {
+                    $this->query .= "SET `" . $column . "` = '" . $toVal . "' ";
+                    $this->firstSet = true;
+                } else {
+                    $this->query .= ",`" . $column . "` = '" . $toVal . "' ";
+                }
             } else {
                 $columnC = count($column);
                 $varC = count($toVal);

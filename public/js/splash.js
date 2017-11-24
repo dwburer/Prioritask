@@ -47,7 +47,6 @@ $('#login-button').on('click', function (e) {
     }
     let email = $('input#email').val();
     let password = $('input#password').val();
-    alert("HELLO");
     $.ajax({
         type: "POST",
         data: 'request=login&email=' + email + '&password=' + password,
