@@ -108,11 +108,7 @@ $has_tasks = count($tasks) > 0;
         var taskContainer = $('#task-list-wrapper');
         var loaderContainer = $('#loader');
 
-        $(document).ready(function () {
-            $('#taskDueDate').flatpickr({
-                enableTime: true
-            });
-
+        function reloadTasks() {
             $.ajax({
                 type: 'POST',
                 data: 'request=getTasks',
@@ -130,6 +126,14 @@ $has_tasks = count($tasks) > 0;
                     hideWaitingFail();
                 }
             });
+        }
+
+        $(document).ready(function () {
+            $('#taskDueDate').flatpickr({
+                enableTime: true
+            });
+
+            reloadTasks();
         });
 
         $('form#task').submit(function (e) {
@@ -196,7 +200,8 @@ $has_tasks = count($tasks) > 0;
             });
         });
 
-        $(document).on("submit", "form#edittask", function () {
+        $(document).on("submit", "form#edittask", function (e) {
+            e.preventDefault();
             var form = $(this);
             var title = form.find('input#taskTitle').val();
             var due = form.find('input#taskDueDate').val();
@@ -208,13 +213,15 @@ $has_tasks = count($tasks) > 0;
             var taskid = form.find('input#taskid').val();
             $.ajax({
                 type: 'POST',
-                data: 'request=editTask&taskid='+taskid+'&task=' + title + '&due='
+                data: 'request=editTask&taskid=' + taskid + '&task=' + title + '&due='
                         + due + '&datetc=' + datetc + '&hourtc=' + hourtc + '&minutetc='
                         + minutetc + '&location=' + location + '&notes=' + notes,
                 url: '<?php echo API_URL . 'index.php' ?>',
                 async: true,
                 success: function (data) {
-                    alert(data);
+                    var div = form.parent().parent();
+                    div.modal('hide');
+                    reloadTasks();
                 },
                 error: function () {
                     alert("an error has occured!");
