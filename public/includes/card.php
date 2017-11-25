@@ -61,13 +61,40 @@ function renderTask($task) { ?>
             $tc_splits = explode(":", $task['time_to_complete']);
             $minutes_to_complete = (intval($tc_splits[0]) * 24 * 60) + (intval($tc_splits[1]) * 60) + intval($tc_splits[2]);
             $urgency = $minutes_to_complete / $time_remaining;
+            $urgency_as_percentage = round($urgency * 100);
+
+            $urgency_bar_class = "";
+
+            // Clamp the percentage used for the progress bar to be between 0-100.
+            if($urgency_as_percentage > 100) {
+                $urgency_as_percentage = 100;
+            }
+
+            if ($urgency_as_percentage < 0) {
+                $urgency_as_percentage = 0;
+            }
+
+            // Update the progress bar class/color based on how urgent the task is.
+            if (in_array($urgency_as_percentage, range(0, 25))) {
+                $urgency_bar_class = "success";
+            } elseif (in_array($urgency_as_percentage, range(26, 50))) {
+                $urgency_bar_class = "info";
+            } elseif (in_array($urgency_as_percentage, range(51, 75))) {
+                $urgency_bar_class = "warning";
+            } else {
+                $urgency_bar_class = "danger";
+            }
+
             ?>
+            <!--
             <p><i>TODO: visually indicate these metrics (urgency) in the with the card formatting/styling</i></p>
             <p>Time remaining from today until due date (minutes): <?= $time_remaining ?></p>
             <p>Estimated time left needed to spend on task until it is complete (inlcuding % done): <?= $minutes_to_complete ?></p>
-            <p>Calculated urgency: <?= $urgency ?></p>
+            -->
+            <p class="text-center text-<?= $urgency_bar_class ?> mb-0">Urgency level:</p>
+            <h4 class="text-center text-<?= $urgency_bar_class ?>"><?= $urgency_as_percentage ?>%</h4>
             <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar progress-bar-striped bg-<?= $urgency_bar_class ?>" role="progressbar" style="width: <?= $urgency_as_percentage ?>%" aria-valuenow="<?= $urgency_as_percentage ?>" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </div>
     </div>
