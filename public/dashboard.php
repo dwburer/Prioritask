@@ -41,7 +41,7 @@ $has_tasks = count($tasks) > 0;
                 </button>
             </div>
             <div class="modal-body">
-                Task successfully added!
+                Task list successfully updated!
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -115,7 +115,7 @@ $has_tasks = count($tasks) > 0;
                 url: '<?php echo API_URL . 'index.php' ?>',
                 async: true,
                 success: function (data) {
-                    //success
+                    // Success
                     if (data != "") {
                         taskContainer.html(data);
                         loaderContainer.hide();
@@ -136,8 +136,10 @@ $has_tasks = count($tasks) > 0;
             reloadTasks();
         });
 
+        // Parse and submit form for task creation.
         $('form#task').submit(function (e) {
             e.preventDefault();
+
             var form = $(this);
             var task = form.find('input#taskTitle').val();
             var due = form.find('input#taskDueDate').val();
@@ -169,6 +171,66 @@ $has_tasks = count($tasks) > 0;
             });
         });
 
+        // Parse and submit form for task modification.
+        $(document).on("submit", "form#edittask", function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var title = form.find('input#taskTitle').val();
+            var due = form.find('input#taskDueDate').val();
+            var datetc = form.find('input#taskEstDays').val();
+            var hourtc = form.find('input#taskEstHours').val();
+            var minutetc = form.find('input#taskEstMinutes').val();
+            var location = form.find('input#taskLocation').val();
+            var notes = form.find('textarea#taskNotes').val();
+            var taskid = form.find('input#taskid').val();
+            $.ajax({
+                type: 'POST',
+                data: 'request=editTask&taskid=' + taskid + '&task=' + title + '&due='
+                        + due + '&datetc=' + datetc + '&hourtc=' + hourtc + '&minutetc='
+                        + minutetc + '&location=' + location + '&notes=' + notes,
+                url: '<?php echo API_URL . 'index.php' ?>',
+                async: true,
+                success: function (data) {
+                    var modalDiv = form.parent().parent();
+                    modalDiv.modal('hide');
+                    $('#confirmationModal').modal('show');
+                },
+                error: function (data) {
+                    console.log('Edit error!: ' + data);
+                }
+            });
+        });
+
+        // Parse and submit form for task deletion.
+        $(document).on("submit", "form#deletetask", function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var taskid = form.find('input#taskid').val();
+
+            $.ajax({
+                type: 'POST',
+                data: 'request=deleteTask&taskid=' + taskid,
+                url: '<?php echo API_URL . 'index.php' ?>',
+                async: true,
+                success: function (data) {
+                    //success
+                    if (data == 1) {
+                        var modalDiv = form.parent().parent();
+                        modalDiv.modal('hide');
+                        $('#confirmationModal').modal('show');
+                    } else {
+                        console.log('Could not submit task for deletion.');
+                    }
+                },
+                error: function (data) {
+                    console.log('Task deletion error!: ' + data);
+                }
+            });
+        });
+
+        // Confirmation for task creation/deletion/modification.
         $('#confirmationModal').on('hidden.bs.modal', function (e) {
             taskContainer.empty();
             loaderContainer.show();
@@ -179,6 +241,7 @@ $has_tasks = count($tasks) > 0;
             });
         });
 
+        // Mark a task as complete, setting its urgency to zero.
         $("div.container").on("click", "#markcomplete", function () {
             var taskid = $(this).attr('taskid');
             $.ajax({
@@ -200,37 +263,7 @@ $has_tasks = count($tasks) > 0;
             });
         });
 
-        $(document).on("submit", "form#edittask", function (e) {
-            e.preventDefault();
-            var form = $(this);
-            var title = form.find('input#taskTitle').val();
-            var due = form.find('input#taskDueDate').val();
-            var datetc = form.find('input#taskEstDays').val();
-            var hourtc = form.find('input#taskEstHours').val();
-            var minutetc = form.find('input#taskEstMinutes').val();
-            var location = form.find('input#taskLocation').val();
-            var notes = form.find('textarea#taskNotes').val();
-            var taskid = form.find('input#taskid').val();
-            $.ajax({
-                type: 'POST',
-                data: 'request=editTask&taskid=' + taskid + '&task=' + title + '&due='
-                        + due + '&datetc=' + datetc + '&hourtc=' + hourtc + '&minutetc='
-                        + minutetc + '&location=' + location + '&notes=' + notes,
-                url: '<?php echo API_URL . 'index.php' ?>',
-                async: true,
-                success: function (data) {
-                    var div = form.parent().parent();
-                    div.modal('hide');
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-                    reloadTasks();
-                },
-                error: function (data) {
-                    console.log('Edit error!: ' + data);
-                }
-            });
-        });
-
+        // Handle and sumbit search for task.
         $(document).on("submit", "form#search", function (e) {
             e.preventDefault();
             var form = $(this);

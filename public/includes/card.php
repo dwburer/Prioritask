@@ -8,19 +8,6 @@ function renderTask($task) { ?>
 
         <div class="card-block">
             <div class="row no-gutters">
-                <!--
-                                <div class="col col-sm-auto">
-                                    <div class="progress blue">
-                                        <span class="progress-left">
-                                            <span class="progress-bar"></span>
-                                        </span>
-                                        <span class="progress-right">
-                                            <span class="progress-bar"></span>
-                                        </span>
-                                        <div class="progress-value">0%</div>
-                                    </div>
-                                </div>
-                -->
                 <div class="col">
                     <!-- Text for the card -->
                     <div class="row col">
@@ -48,7 +35,7 @@ function renderTask($task) { ?>
                     </div>
                     <hr>
                     <div class="row justify-content-between">
-                        <div class="col col-sm-auto">
+                        <div class="col">
                             <?php if ($task['completed'] > 0) { ?>
                                 <a href="#" taskid="<?= $task['taskid'] ?>" class="btn btn-primary">Completed</a>
                             <?php } else { ?>
@@ -57,6 +44,9 @@ function renderTask($task) { ?>
                         </div>
                         <div class="col col-sm-auto">
                             <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#editModal<?= $task['taskid'] ?>">Edit</a>
+                        </div>
+                        <div class="col col-sm-auto">
+                            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?= $task['taskid'] ?>">Delete</a>
                         </div>
                     </div>
                 </div>
@@ -79,6 +69,30 @@ function renderTask($task) { ?>
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal<?= $task['taskid'] ?>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="deletetask">
+                <input type="hidden" id="taskid" value="<?= $task['taskid'] ?>" />
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delte this task?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Yes, I'm Sure</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -410,7 +410,15 @@ class Session {
      * @param type $taskid
      */
     public function deleteTask($taskid) {
-        //TODO
+        if ($this->isLoggedIn()) {
+            $stmt = $this->mysqli->prepare("DELETE FROM `task` WHERE `taskid` = ?");
+            $stmt->bind_param("i", $taskid);
+            if ($stmt->execute()) {
+                $stmt->close();
+                return true;
+            }
+            return false;
+        }
     }
 
     public function searchTasks($term) {
