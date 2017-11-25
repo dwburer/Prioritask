@@ -416,6 +416,7 @@ class Session {
     public function searchTasks($term) {
         $tasks = array();
         $term = "%" . $term . "%";
+        $uid = $this->getUid($this->sid);
         //using mysqli->query cus prepared statement was broken and i coudlnt be bothered to properly debug and fix.
         //have to manually sanitize input because of this
         $term = $this->qb->clean($term);
@@ -423,10 +424,7 @@ class Session {
             ,`time_to_complete`, `notes`, `location`
             ,`completed`,`dc`,`hc`,`mc` 
             FROM `task`
-            WHERE `task_name` LIKE '%{$term}%'");
-        //$stmt->bind_param("s", $term);
-//        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location, $completed, $dc, $hc, $mc);
-//        $stmt->execute();
+            WHERE `task_name` LIKE '%{$term}%' AND `userid` = {$uid}");
         if ($stmt->num_rows >= 1) {
             while ($row = $stmt->fetch_assoc()) {
                 $tasks[] = $row;

@@ -7,5 +7,5 @@ if (!is_null($tasks)) {
     foreach (array_reverse($tasks) as $task) {
         renderTask($task);
     }
-}
+} 
 ?>
