@@ -234,11 +234,7 @@ $has_tasks = count($tasks) > 0;
         $('#confirmationModal').on('hidden.bs.modal', function (e) {
             taskContainer.empty();
             loaderContainer.show();
-
-            $.get('<?php echo BASE_URL . 'task_list.php' ?>', function (data) {
-                taskContainer.html(data);
-                loaderContainer.hide();
-            });
+            reloadTasks();
         });
 
         // Mark a task as complete, setting its urgency to zero.
@@ -252,7 +248,7 @@ $has_tasks = count($tasks) > 0;
                 success: function (data) {
                     //user registered and set as logged in!
                     if (data == 1) {
-                        $("a#markcomplete").html("Completed").remove('id');
+                        $("a#markcomplete").html('<i class="fa fa-check mr-2" aria-hidden="true"></i>Completed').remove('id');
                     } else {
                         alert("Couldn't mark task completed in database!");
                     }

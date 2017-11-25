@@ -15,38 +15,76 @@ function renderTask($task) { ?>
                     </div>
 
                     <div class="row">
-                        <!-- Display the time information for the card -->
                         <div class="col">
-                            <p class="card-due-on-header mb-0">
-                                Due on:
-                            </p>
-                            <p class="card-due-on text-muted mb-0">
-                                <?= $task['when_due'] ?>
-                            </p>
+                            <a data-toggle="collapse" href="#taskDetail<?= $task['taskid'] ?>" aria-expanded="false" aria-controls="taskDetail<?= $task['taskid'] ?>">
+                                Details <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                            </a>
                         </div>
-                        <div class="col">
-                            <p class="card-complete-time-header mb-0">
-                                Estimated time to complete:
-                            </p>
-                            <p class="card-complete-time text-muted mb-0">
-                                <?= $task['time_to_complete'] ?>
-                            </p>
+                    </div>
+
+                    <div id="taskDetail<?= $task['taskid'] ?>" class="collapse" role="tabpanel">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="row">
+                                    <!-- Display the time information for the card -->
+                                    <div class="col">
+                                        <p class="card-due-on-header mb-0">
+                                            Due on:
+                                        </p>
+                                        <p class="card-due-on text-muted">
+                                            <?= $task['when_due'] ?>
+                                        </p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="card-complete-time-header mb-0">
+                                            Estimated time to complete:
+                                        </p>
+                                        <p class="card-complete-time text-muted">
+                                            <?= $task['time_to_complete'] ?>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="card-due-on-header mb-0">
+                                            Location:
+                                        </p>
+                                        <p class="card-due-on text-muted">
+                                            <?= $task['location'] ?>
+                                        </p>
+                                        <iframe
+                                            width="100%"
+                                            height="450"
+                                            frameborder="0" style="border:0"
+                                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCDspdIFVXRGVm6UJxgbWcoCFliWXk-6Ss&q=<?php echo str_replace(' ', '+', $task['location']); ?>" allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr>
-                    <div class="row justify-content-between">
+                    <div class="row justify-content-between no-gutters">
                         <div class="col">
                             <?php if ($task['completed'] > 0) { ?>
-                                <a href="#" taskid="<?= $task['taskid'] ?>" class="btn btn-primary">Completed</a>
+                                <a href="#" taskid="<?= $task['taskid'] ?>" class="btn btn-primary">
+                                    <i class="fa fa-check mr-2" aria-hidden="true"></i>Completed
+                                </a>
                             <?php } else { ?>
-                                <a href="#" taskid="<?= $task['taskid'] ?>" id="markcomplete" class="btn btn-primary">Mark as complete</a>
+                                <a href="#" taskid="<?= $task['taskid'] ?>" id="markcomplete" class="btn btn-primary">
+                                    Mark as complete
+                                </a>
                             <?php } ?>
                         </div>
                         <div class="col col-sm-auto">
-                            <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#editModal<?= $task['taskid'] ?>">Edit</a>
+                            <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#editModal<?= $task['taskid'] ?>">
+                                <i class="fa fa-pencil mr-2" aria-hidden="true"></i>Edit
+                            </a>
                         </div>
                         <div class="col col-sm-auto">
-                            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?= $task['taskid'] ?>">Delete</a>
+                            <a href="#" class="btn btn-danger ml-2" data-toggle="modal" data-target="#deleteModal<?= $task['taskid'] ?>">
+                                <i class="fa fa-times mr-2" aria-hidden="true"></i>Delete
+                            </a>
                         </div>
                     </div>
                 </div>
