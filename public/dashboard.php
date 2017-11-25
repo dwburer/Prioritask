@@ -7,10 +7,10 @@ $has_tasks = count($tasks) > 0;
 ?>
 
 <?php startblock('content') ?>
-<h1>Dashboard</h1>
+<h2>Dashboard</h2>
 
 <div class="card-list">
-    <!-- Button trigger modal -->
+    <!-- Trigger addTask modal -->
     <div class="add-card-button mb-3">
         <div class="row justify-content-center">
             <div class="col col-auto">
@@ -30,7 +30,7 @@ $has_tasks = count($tasks) > 0;
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Confirmation modal -->
 <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -50,7 +50,7 @@ $has_tasks = count($tasks) > 0;
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Add task modal -->
 <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="task">
@@ -73,19 +73,20 @@ $has_tasks = count($tasks) > 0;
                     </div>
                     <div class="form-group">
                         <label for="taskEstDays">Est. days to complete:</label>
-                        <input type="number" class="form-control" id="taskEstDays">
+                        <input type="number" class="form-control" id="taskEstDays" value="0">
                     </div>
                     <div class="form-group">
                         <label for="taskEstHours">Est. hours to complete:</label>
-                        <input type="number" class="form-control" id="taskEstHours">
+                        <input type="number" class="form-control" id="taskEstHours" value="0">
                     </div>
                     <div class="form-group">
                         <label for="taskEstMinutes">Est. minutes to complete:</label>
-                        <input type="number" class="form-control" id="taskEstMinutes">
+                        <input type="number" class="form-control" id="taskEstMinutes" value="0">
                     </div>
                     <div class="form-group">
                         <label for="taskLocation">Location</label>
-                        <input type="text" class="form-control" id="taskLocation">
+                        <input type="text" class="form-control" id="taskLocation" placeholder="Enter location">
+                        <small id="titleHelp" class="form-text text-muted">The location for your task, eg. "Statesboro, Georgia" (optional)</small>
                     </div>
                     <div class="form-group">
                         <label for="taskNotes">Notes</label>

@@ -14,7 +14,7 @@
         <link rel="apple-touch-icon" href="icon.png">
         <!-- Place favicon.ico in the root directory -->
 
-        <!-- Font Awesome specifically needs to be near the trop -->
+        <!-- Font Awesome specifically needs to be near the top -->
         <script src="https://use.fontawesome.com/1670b49324.js"></script>
 
         <link rel="stylesheet" href="css/normalize.css">
