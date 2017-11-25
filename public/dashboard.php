@@ -221,6 +221,8 @@ $has_tasks = count($tasks) > 0;
                 success: function (data) {
                     var div = form.parent().parent();
                     div.modal('hide');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
                     reloadTasks();
                 },
                 error: function () {
