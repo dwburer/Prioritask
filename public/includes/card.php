@@ -92,16 +92,25 @@ function renderTask($task) { ?>
         </div>
         <div class="card-footer">
             <?php
-            $to_time = strtotime(date("Y-m-d H:i:s"));
-            $from_time = strtotime($task['when_due']);
-            $time_remaining = round(abs($to_time - $from_time) / 60, 2) . " minutes";
 
-            $tc_splits = explode(":", $task['time_to_complete']);
-            $minutes_to_complete = (intval($tc_splits[0]) * 24 * 60) + (intval($tc_splits[1]) * 60) + intval($tc_splits[2]);
-            $urgency = $minutes_to_complete / $time_remaining;
+            $urgency = 0;
+
+            if ($task['completed'] == 0) {
+                $to_time = strtotime(date("Y-m-d H:i:s"));
+                $from_time = strtotime($task['when_due']);
+                $time_remaining = round(($from_time - $to_time) / 60, 2) . " minutes";
+
+                if ($time_remaining < 0) {
+                    $time_remaining = 0;
+                }
+
+                $tc_splits = explode(":", $task['time_to_complete']);
+                $minutes_to_complete = (intval($tc_splits[0]) * 24 * 60) + (intval($tc_splits[1]) * 60) + intval($tc_splits[2]);
+                $urgency = $minutes_to_complete / $time_remaining;
+            }
+             
             $urgency_as_percentage = round($urgency * 100);
-
-            $urgency_bar_class = "";
+            $urgency_percentage_text = "0% (Completed)";
 
             // Clamp the percentage used for the progress bar to be between 0-100.
             if($urgency_as_percentage > 100) {
@@ -111,6 +120,12 @@ function renderTask($task) { ?>
             if ($urgency_as_percentage < 0) {
                 $urgency_as_percentage = 0;
             }
+
+            if ($task['completed'] == 0) {
+                $urgency_percentage_text = $urgency_as_percentage . "%";
+            }
+
+            $urgency_bar_class = "";
 
             // Update the progress bar class/color based on how urgent the task is.
             if (in_array($urgency_as_percentage, range(0, 25))) {
@@ -124,13 +139,14 @@ function renderTask($task) { ?>
             }
 
             ?>
-            <!--
-            <p><i>TODO: visually indicate these metrics (urgency) in the with the card formatting/styling</i></p>
+            
+          <!--   <p><i>TODO: visually indicate these metrics (urgency) in the with the card formatting/styling</i></p>
             <p>Time remaining from today until due date (minutes): <?= $time_remaining ?></p>
             <p>Estimated time left needed to spend on task until it is complete (inlcuding % done): <?= $minutes_to_complete ?></p>
-            -->
+            <p><?= $urgency ?></p> -->
+
             <p class="text-center text-<?= $urgency_bar_class ?> mb-0">Urgency level:</p>
-            <h4 class="text-center text-<?= $urgency_bar_class ?>"><?= $urgency_as_percentage ?>%</h4>
+            <h4 class="text-center text-<?= $urgency_bar_class ?>"><?= $urgency_percentage_text ?></h4>
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-<?= $urgency_bar_class ?>" role="progressbar" style="width: <?= $urgency_as_percentage ?>%" aria-valuenow="<?= $urgency_as_percentage ?>" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
