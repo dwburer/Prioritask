@@ -65,10 +65,10 @@ function renderTask($task) { ?>
         <div class="card-footer">
             <?php
             $to_time = strtotime(date("Y-m-d H:i:s"));
-            $from_time = strtotime($task['due']);
+            $from_time = strtotime($task['when_due']);
             $time_remaining = round(abs($to_time - $from_time) / 60, 2) . " minutes";
 
-            $tc_splits = explode(":", $task['tc']);
+            $tc_splits = explode(":", $task['time_to_complete']);
             $minutes_to_complete = (intval($tc_splits[0]) * 24 * 60) + (intval($tc_splits[1]) * 60) + intval($tc_splits[2]);
             $urgency = $minutes_to_complete / $time_remaining;
             ?>
@@ -96,7 +96,7 @@ function renderTask($task) { ?>
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="taskTitle">Title</label>
-                            <input type="text" class="form-control" id="taskTitle" aria-describedby="titleHelp" value="<?= $task['title'] ?>">
+                            <input type="text" class="form-control" id="taskTitle" aria-describedby="titleHelp" value="<?= $task['task_name'] ?>">
                             <small id="titleHelp" class="form-text text-muted">The title for your task.</small>
                         </div>
                         <div class="form-group">
@@ -105,7 +105,7 @@ function renderTask($task) { ?>
                         </div>
                         <div class="form-group">
                             <label for="taskEstDays">Est. days to complete:</label>
-                            <input type="number" class="form-control" id="taskEstDays" value="<?= $tc_splits['1'] ?>">
+                            <input type="number" class="form-control" id="taskEstDays" value="<?= $tc_splits['0'] ?>">
                         </div>
                         <div class="form-group">
                             <label for="taskEstHours">Est. hours to complete:</label>
