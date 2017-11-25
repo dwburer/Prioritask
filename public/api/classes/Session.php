@@ -326,7 +326,7 @@ class Session {
             $stmt = $this->mysqli->prepare("INSERT INTO `task` "
                     . "(`userid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`, `dc`, `hc`, `mc`) "
                     . "VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)");
-            $stmt->bind_param("isssssiii", $uid, $title, $due, $tc, $notes, $location,$datetc,$hourtc,$minutetc);
+            $stmt->bind_param("isssssiii", $uid, $title, $due, $tc, $notes, $location, $datetc, $hourtc, $minutetc);
             if ($stmt->execute()) {
                 $stmt->close();
                 return true;
@@ -344,13 +344,13 @@ class Session {
         $tasks = null;
         $stmt = $this->mysqli->prepare("SELECT `taskid`, `task_name`, `when_due`, `time_to_complete`, `notes`, `location`,`completed`,`dc`,`hc`,`mc` FROM `task` WHERE `userid` = ?");
         $stmt->bind_param("i", $userid);
-        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location, $completed,$dc,$hc,$mc);
+        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location, $completed, $dc, $hc, $mc);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows >= 1) {
             while ($stmt->fetch()) {
-                $tasks[] = array('taskid' => $taskid, 'title' => $title, 'due' => $due
-                    , 'tc' => $tc, 'notes' => $notes, 'location' => $location
+                $tasks[] = array('taskid' => $taskid, 'task_name' => $title, 'when_due' => $due
+                    , 'time_to_complete' => $tc, 'notes' => $notes, 'location' => $location
                     , 'completed' => $completed, 'dc' => $dc, 'hc' => $hc, 'mc' => $mc);
             }
         }
@@ -374,7 +374,7 @@ class Session {
             //puts the est. completion time together
             $qry = $this->qb->start();
             $qry->update("task")->set("task_name", $title)->set("location", $location)->set("notes", $notes);
-            if($due != "") {
+            if ($due != "") {
                 $qry->set("when_due", $due);
             }
             //Split these parts of the next conditonal
@@ -382,10 +382,10 @@ class Session {
             // -- fixed now but going to leave like this cus lazy
             $a = ($hc != "" && $dc != "" && $mc != "");
             $b = intval($hc) && intval($dc) && intval($mc);
-            $c = ($hc+$dc+$mc) > 0;
-            
+            $c = ($hc + $dc + $mc) > 0;
+
             //if proper hour, day and minute submitted
-            if( $a && $b && $c) {
+            if ($a && $b && $c) {
                 $tc = $dc . ":" . $hc . ":" . $mc;
                 $qry->set("dc", $dc);
                 $qry->set("hc", $hc);
@@ -401,7 +401,6 @@ class Session {
             if ($qry->exec()) {
                 return true;
             }
-            echo $this->qb->lastError();
             return false;
         }
     }
@@ -413,12 +412,34 @@ class Session {
     public function deleteTask($taskid) {
         //TODO
     }
-    
+
+    public function searchTasks($term) {
+        $tasks = array();
+        $term = "%" . $term . "%";
+        //using mysqli->query cus prepared statement was broken and i coudlnt be bothered to properly debug and fix.
+        //have to manually sanitize input because of this
+        $term = $this->qb->clean($term);
+        $stmt = $this->mysqli->query("SELECT `taskid`,`task_name`,`when_due`
+            ,`time_to_complete`, `notes`, `location`
+            ,`completed`,`dc`,`hc`,`mc` 
+            FROM `task`
+            WHERE `task_name` LIKE '%{$term}%'");
+        //$stmt->bind_param("s", $term);
+//        $stmt->bind_result($taskid, $title, $due, $tc, $notes, $location, $completed, $dc, $hc, $mc);
+//        $stmt->execute();
+        if ($stmt->num_rows >= 1) {
+            while ($row = $stmt->fetch_assoc()) {
+                $tasks[] = $row;
+            }
+        }
+        return $tasks;
+    }
+
     public function completeTask($taskid) {
         $stmt = $this->mysqli->prepare("UPDATE `task` SET `completed` = 1 WHERE `taskid` = ?");
-        $stmt->bind_param("i",$taskid);
+        $stmt->bind_param("i", $taskid);
         $res = $stmt->execute();
-        if($this->mysqli->affected_rows >= 0) {
+        if ($this->mysqli->affected_rows >= 0) {
             return true;
         }
         return false;

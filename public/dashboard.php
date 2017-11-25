@@ -163,8 +163,8 @@ $has_tasks = count($tasks) > 0;
                         console.log('Could not submit task.');
                     }
                 },
-                error: function () {
-                    alert("an error has occured!");
+                error: function (data) {
+                    console.log('Task error!: ' + data);
                 }
             });
         });
@@ -225,8 +225,30 @@ $has_tasks = count($tasks) > 0;
                     $('.modal-backdrop').remove();
                     reloadTasks();
                 },
-                error: function () {
-                    alert("an error has occured!");
+                error: function (data) {
+                    console.log('Edit error!: ' + data);
+                }
+            });
+        });
+
+        $(document).on("submit", "form#search", function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var term = form.find('input#searchterm').val();
+            $.ajax({
+                type: 'POST',
+                data: 'request=searchTasks&term=' + term,
+                url: '<?php echo API_URL . 'index.php' ?>',
+                async: true,
+                success: function (data) {
+                    //success
+                    if (data != "") {
+                        taskContainer.html(data);
+                        loaderContainer.hide();
+                    }
+                },
+                error: function (data) {
+                    console.log('Search error!: ' + data);
                 }
             });
         });

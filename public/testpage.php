@@ -9,4 +9,19 @@ function __autoload($class_name) {
 $db = Database::getConnection();
 $session = new Session($db);
 
-echo $session->completeTask(19);
+$tasks = $session->getTasks(14);
+?>
+<pre>
+<?php
+echo var_dump($tasks);
+?>
+</pre>
+===================================
+<?php
+$tasks = $session->searchTasks("abc");
+?>
+<pre>
+<?php
+echo var_dump($tasks);
+?>
+</pre>

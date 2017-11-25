@@ -4,7 +4,7 @@ function renderTask($task) { ?>
     <div class="task card mb-5" id="<?= $task['taskid'] ?>">
 
         <!-- Displays the task's title -->
-        <div class="card-header"><?= $task['title'] ?></div>
+        <div class="card-header"><?= $task['task_name'] ?></div>
 
         <div class="card-block">
             <div class="row no-gutters">
@@ -34,7 +34,7 @@ function renderTask($task) { ?>
                                 Due on:
                             </p>
                             <p class="card-due-on text-muted mb-0">
-                                    <?= $task['due'] ?>
+                                <?= $task['when_due'] ?>
                             </p>
                         </div>
                         <div class="col">
@@ -42,7 +42,7 @@ function renderTask($task) { ?>
                                 Estimated time to complete:
                             </p>
                             <p class="card-complete-time text-muted mb-0">
-    <?= $task['tc'] ?>
+                                <?= $task['time_to_complete'] ?>
                             </p>
                         </div>
                     </div>
@@ -56,7 +56,7 @@ function renderTask($task) { ?>
                             <?php } ?>
                         </div>
                         <div class="col col-sm-auto">
-                            <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#editModal<?=$task['taskid']?>">Edit</a>
+                            <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#editModal<?= $task['taskid'] ?>">Edit</a>
                         </div>
                     </div>
                 </div>
@@ -82,55 +82,55 @@ function renderTask($task) { ?>
         </div>
     </div>
 
-<!-- Modal -->
-<div class="modal fade" id="editModal<?=$task['taskid']?>" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form id="edittask">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit task:</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="editModal<?= $task['taskid'] ?>" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="edittask">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit task:</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="taskTitle">Title</label>
+                            <input type="text" class="form-control" id="taskTitle" aria-describedby="titleHelp" value="<?= $task['title'] ?>">
+                            <small id="titleHelp" class="form-text text-muted">The title for your task.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskDueDate">Due date</label>
+                            <input id="taskDueDate" type="date" data-id="datetime">
+                        </div>
+                        <div class="form-group">
+                            <label for="taskEstDays">Est. days to complete:</label>
+                            <input type="number" class="form-control" id="taskEstDays" value="<?= $tc_splits['1'] ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="taskEstHours">Est. hours to complete:</label>
+                            <input type="number" class="form-control" id="taskEstHours" value="<?= $tc_splits['1'] ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="taskEstMinutes">Est. minutes to complete:</label>
+                            <input type="number" class="form-control" id="taskEstMinutes" value="<?= $tc_splits['2'] ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="taskLocation">Location</label>
+                            <input type="text" class="form-control" id="taskLocation" value="<?= $task['location'] ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="taskNotes">Notes</label>
+                            <textarea class="form-control" id="taskNotes" rows="3"><?= $task['notes'] ?></textarea>
+                        </div>
+                        <input type="hidden" id="taskid" value="<?= $task['taskid'] ?>" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="taskTitle">Title</label>
-                        <input type="text" class="form-control" id="taskTitle" aria-describedby="titleHelp" value="<?= $task['title'] ?>">
-                        <small id="titleHelp" class="form-text text-muted">The title for your task.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="taskDueDate">Due date</label>
-                        <input id="taskDueDate" type="date" data-id="datetime">
-                    </div>
-                    <div class="form-group">
-                        <label for="taskEstDays">Est. days to complete:</label>
-                        <input type="number" class="form-control" id="taskEstDays" value="<?= $tc_splits['1'] ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="taskEstHours">Est. hours to complete:</label>
-                        <input type="number" class="form-control" id="taskEstHours" value="<?= $tc_splits['1'] ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="taskEstMinutes">Est. minutes to complete:</label>
-                        <input type="number" class="form-control" id="taskEstMinutes" value="<?= $tc_splits['2'] ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="taskLocation">Location</label>
-                        <input type="text" class="form-control" id="taskLocation" value="<?= $task['location'] ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="taskNotes">Notes</label>
-                        <textarea class="form-control" id="taskNotes" rows="3"><?= $task['notes'] ?></textarea>
-                    </div>
-                    <input type="hidden" id="taskid" value="<?=$task['taskid']?>" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 <?php } ?>
