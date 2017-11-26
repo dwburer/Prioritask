@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `prioritask`.`users` (
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`userid`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 14
+AUTO_INCREMENT = 21
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -36,7 +36,6 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `prioritask`.`sessions` (
   `sid` VARCHAR(255) NOT NULL,
   `timestamp` INT(255) NULL DEFAULT NULL,
-  `lastclick` INT(255) NULL DEFAULT NULL,
   `userid` INT(11) NOT NULL,
   INDEX `uswer_idx` (`userid` ASC),
   CONSTRAINT `uswer`
@@ -59,6 +58,10 @@ CREATE TABLE IF NOT EXISTS `prioritask`.`task` (
   `time_to_complete` TIME NOT NULL COMMENT 'expected time to complete',
   `notes` TEXT NOT NULL,
   `location` VARCHAR(45) NOT NULL,
+  `completed` INT(1) NULL DEFAULT '0',
+  `dc` INT(11) NULL DEFAULT NULL,
+  `hc` INT(11) NULL DEFAULT NULL,
+  `mc` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`taskid`),
   INDEX `userid` (`userid` ASC),
   CONSTRAINT `user`
@@ -67,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `prioritask`.`task` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 45
 DEFAULT CHARACTER SET = latin1;
 
 
