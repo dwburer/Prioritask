@@ -1,7 +1,7 @@
 <?php include 'templates/base.php'; ?>
 
 <?php startblock('content') ?>
-	<p>Logging out, please wait...</p>
+	<p class="text-center">Logging out, please wait...</p>
 <?php endblock() ?>
 
 <?php startblock('footer_js') ?>
