@@ -1,11 +1,65 @@
 <?php
 
+/**
+ * Completely renders a task to a card, including accompanying modals and neccesary javascript.
+ */
 function renderTask($task) { ?>
     <div class="task card mb-5" id="<?= $task['taskid'] ?>">
 
         <!-- Displays the task's title -->
         <div class="card-header"><?= $task['task_name'] ?></div>
 
+        <?php
+
+        // Urgency is calculated as (time required to complete)/(time remaining until due date)
+        $urgency = 0;
+
+        $tc_splits = explode(":", $task['time_to_complete']);
+
+        // If a task is marked as completed, leave urgency as zero.
+        if ($task['completed'] == 0) {
+            $to_time = strtotime(date("Y-m-d H:i:s"));
+            $from_time = strtotime($task['when_due']);
+            $time_remaining = round(($from_time - $to_time) / 60, 2) . " minutes";
+
+            if ($time_remaining < 0) {
+                $time_remaining = 0;
+            }
+
+            $minutes_to_complete = (intval($tc_splits[0]) * 24 * 60) + (intval($tc_splits[1]) * 60) + intval($tc_splits[2]);
+            $urgency = $minutes_to_complete / $time_remaining;
+        }
+            
+        $urgency_as_percentage = round($urgency * 100);
+        $urgency_percentage_text = "0% (Completed)";
+
+        // Clamp the percentage used for the progress bar to be between 0-100.
+        if($urgency_as_percentage > 100) {
+            $urgency_as_percentage = 100;
+        }
+
+        if ($urgency_as_percentage < 0) {
+            $urgency_as_percentage = 0;
+        }
+
+        if ($task['completed'] == 0) {
+            $urgency_percentage_text = $urgency_as_percentage . "%";
+        }
+
+        $urgency_bar_class = "";
+
+        // Update the progress bar class/color based on how urgent the task is.
+        if (in_array($urgency_as_percentage, range(0, 25))) {
+            $urgency_bar_class = "success";
+        } elseif (in_array($urgency_as_percentage, range(26, 50))) {
+            $urgency_bar_class = "info";
+        } elseif (in_array($urgency_as_percentage, range(51, 75))) {
+            $urgency_bar_class = "warning";
+        } else {
+            $urgency_bar_class = "danger";
+        }
+
+        ?>
         <div class="card-block">
             <div class="row no-gutters">
                 <div class="col">
@@ -16,6 +70,7 @@ function renderTask($task) { ?>
 
                     <div class="row">
                         <div class="col">
+                        <!-- Detail toggle -->
                             <a data-toggle="collapse" href="#taskDetail<?= $task['taskid'] ?>" aria-expanded="false" aria-controls="taskDetail<?= $task['taskid'] ?>">
                                 Details <i class="fa fa-chevron-down" aria-hidden="true"></i>
                             </a>
@@ -29,10 +84,10 @@ function renderTask($task) { ?>
                                     <!-- Display the time information for the card -->
                                     <div class="col">
                                         <p class="card-due-on-header mb-0">
-                                            Due on:
+                                            Due:
                                         </p>
                                         <p class="card-due-on text-muted">
-                                            <?= $task['when_due'] ?>
+                                            <?php echo date_format(date_create($task['when_due']), 'g:ia \o\n l, F jS Y'); ?>
                                         </p>
                                     </div>
                                     <div class="col">
@@ -40,12 +95,15 @@ function renderTask($task) { ?>
                                             Estimated time to complete:
                                         </p>
                                         <p class="card-complete-time text-muted">
-                                            <?= $task['time_to_complete'] ?>
+                                            <?php 
+                                            echo intval($tc_splits[0]) . " days, " . intval($tc_splits[1]) . " hours, and " . intval($tc_splits[2]) . " minutes";
+                                            ?>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
+                                        <!-- Show the textual and graphical location of the task -->
                                         <p class="card-due-on-header mb-0">
                                             Location:
                                         </p>
@@ -65,7 +123,7 @@ function renderTask($task) { ?>
                     </div>
                     <hr>
                     <div class="row justify-content-between no-gutters">
-                        <div class="col">
+                        <div class="col-12 col-sm mb-3 mb-sm-0 text-center text-sm-left">
                             <?php if ($task['completed'] > 0) { ?>
                                 <a href="#" taskid="<?= $task['taskid'] ?>" class="btn btn-primary">
                                     <i class="fa fa-check mr-2" aria-hidden="true"></i>Completed
@@ -76,13 +134,13 @@ function renderTask($task) { ?>
                                 </a>
                             <?php } ?>
                         </div>
-                        <div class="col col-sm-auto">
+                        <div class="col-12 col-sm-auto mb-3 mb-sm-0 text-center">
                             <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#editModal<?= $task['taskid'] ?>">
                                 <i class="fa fa-pencil mr-2" aria-hidden="true"></i>Edit
                             </a>
                         </div>
-                        <div class="col col-sm-auto">
-                            <a href="#" class="btn btn-danger ml-2" data-toggle="modal" data-target="#deleteModal<?= $task['taskid'] ?>">
+                        <div class="col-12 col-sm-auto text-center">
+                            <a href="#" class="btn btn-danger ml-sm-2" data-toggle="modal" data-target="#deleteModal<?= $task['taskid'] ?>">
                                 <i class="fa fa-times mr-2" aria-hidden="true"></i>Delete
                             </a>
                         </div>
@@ -91,60 +149,6 @@ function renderTask($task) { ?>
             </div>
         </div>
         <div class="card-footer">
-            <?php
-
-            $urgency = 0;
-
-            if ($task['completed'] == 0) {
-                $to_time = strtotime(date("Y-m-d H:i:s"));
-                $from_time = strtotime($task['when_due']);
-                $time_remaining = round(($from_time - $to_time) / 60, 2) . " minutes";
-
-                if ($time_remaining < 0) {
-                    $time_remaining = 0;
-                }
-
-                $tc_splits = explode(":", $task['time_to_complete']);
-                $minutes_to_complete = (intval($tc_splits[0]) * 24 * 60) + (intval($tc_splits[1]) * 60) + intval($tc_splits[2]);
-                $urgency = $minutes_to_complete / $time_remaining;
-            }
-             
-            $urgency_as_percentage = round($urgency * 100);
-            $urgency_percentage_text = "0% (Completed)";
-
-            // Clamp the percentage used for the progress bar to be between 0-100.
-            if($urgency_as_percentage > 100) {
-                $urgency_as_percentage = 100;
-            }
-
-            if ($urgency_as_percentage < 0) {
-                $urgency_as_percentage = 0;
-            }
-
-            if ($task['completed'] == 0) {
-                $urgency_percentage_text = $urgency_as_percentage . "%";
-            }
-
-            $urgency_bar_class = "";
-
-            // Update the progress bar class/color based on how urgent the task is.
-            if (in_array($urgency_as_percentage, range(0, 25))) {
-                $urgency_bar_class = "success";
-            } elseif (in_array($urgency_as_percentage, range(26, 50))) {
-                $urgency_bar_class = "info";
-            } elseif (in_array($urgency_as_percentage, range(51, 75))) {
-                $urgency_bar_class = "warning";
-            } else {
-                $urgency_bar_class = "danger";
-            }
-
-            ?>
-            
-          <!--   <p><i>TODO: visually indicate these metrics (urgency) in the with the card formatting/styling</i></p>
-            <p>Time remaining from today until due date (minutes): <?= $time_remaining ?></p>
-            <p>Estimated time left needed to spend on task until it is complete (inlcuding % done): <?= $minutes_to_complete ?></p>
-            <p><?= $urgency ?></p> -->
-
             <p class="text-center text-<?= $urgency_bar_class ?> mb-0">Urgency level:</p>
             <h4 class="text-center text-<?= $urgency_bar_class ?>"><?= $urgency_percentage_text ?></h4>
             <div class="progress">
@@ -153,7 +157,7 @@ function renderTask($task) { ?>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Task deletion modal -->
     <div class="modal fade" id="deleteModal<?= $task['taskid'] ?>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form id="deletetask">
@@ -177,7 +181,7 @@ function renderTask($task) { ?>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Task edit modal -->
     <div class="modal fade" id="editModal<?= $task['taskid'] ?>" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form id="edittask">
@@ -196,19 +200,19 @@ function renderTask($task) { ?>
                         </div>
                         <div class="form-group">
                             <label for="taskDueDate">Due date</label>
-                            <input id="taskDueDate" type="date" data-id="datetime">
+                            <input class="flatpickr flatpickr-input active form-control" id="taskEditDueDate<?= $task['taskid'] ?>" type="text" value="<?= $task['when_due'] ?>" data-id="datetime" readonly="readonly">
                         </div>
                         <div class="form-group">
                             <label for="taskEstDays">Est. days to complete:</label>
-                            <input type="number" class="form-control" id="taskEstDays" value="<?= $tc_splits['0'] ?>">
+                            <input type="number" class="form-control" id="taskEstDays" min="0" value="<?= intval($tc_splits['0']) ?>">
                         </div>
                         <div class="form-group">
                             <label for="taskEstHours">Est. hours to complete:</label>
-                            <input type="number" class="form-control" id="taskEstHours" value="<?= $tc_splits['1'] ?>">
+                            <input type="number" class="form-control" id="taskEstHours" min="0" value="<?= intval($tc_splits['1']) ?>">
                         </div>
                         <div class="form-group">
                             <label for="taskEstMinutes">Est. minutes to complete:</label>
-                            <input type="number" class="form-control" id="taskEstMinutes" value="<?= $tc_splits['2'] ?>">
+                            <input type="number" class="form-control" id="taskEstMinutes" min="0" value="<?= intval($tc_splits['2']) ?>">
                         </div>
                         <div class="form-group">
                             <label for="taskLocation">Location</label>
@@ -228,4 +232,11 @@ function renderTask($task) { ?>
             </form>
         </div>
     </div>
+    <script>
+        (function ($) {
+            $('#taskEditDueDate<?= $task['taskid'] ?>').flatpickr({
+                enableTime: true
+            });
+        })(jQuery);
+    </script>
 <?php } ?>

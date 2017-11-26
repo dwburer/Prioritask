@@ -10,10 +10,10 @@ $has_tasks = count($tasks) > 0;
 <h2>Dashboard</h2>
 
 <div class="card-list">
-    <!-- Trigger addTask modal -->
     <div class="add-card-button mb-3">
         <div class="row justify-content-center">
             <div class="col col-auto">
+                <!-- Trigger addTask modal -->
                 <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#taskModal">
                     <?= ($has_tasks ? 'Add a new task' : 'Add a task') ?>
                 </button>
@@ -73,15 +73,15 @@ $has_tasks = count($tasks) > 0;
                     </div>
                     <div class="form-group">
                         <label for="taskEstDays">Est. days to complete:</label>
-                        <input type="number" class="form-control" id="taskEstDays" value="0">
+                        <input type="number" class="form-control" id="taskEstDays" min="0" value="0">
                     </div>
                     <div class="form-group">
                         <label for="taskEstHours">Est. hours to complete:</label>
-                        <input type="number" class="form-control" id="taskEstHours" value="0">
+                        <input type="number" class="form-control" id="taskEstHours" min="0" value="0">
                     </div>
                     <div class="form-group">
                         <label for="taskEstMinutes">Est. minutes to complete:</label>
-                        <input type="number" class="form-control" id="taskEstMinutes" value="0">
+                        <input type="number" class="form-control" id="taskEstMinutes" min="0" value="0">
                     </div>
                     <div class="form-group">
                         <label for="taskLocation">Location</label>
@@ -110,6 +110,10 @@ $has_tasks = count($tasks) > 0;
         var loaderContainer = $('#loader');
 
         function reloadTasks() {
+            taskContainer.empty();
+            loaderContainer.show();
+            $('body').removeAttr('style');
+
             $.ajax({
                 type: 'POST',
                 data: 'request=getTasks',
@@ -158,7 +162,7 @@ $has_tasks = count($tasks) > 0;
                 url: '<?php echo API_URL . 'index.php' ?>',
                 async: true,
                 success: function (data) {
-                    //success
+                    // If response code was returned (success)
                     if (data == 1) {
                         $('#taskModal').modal('hide');
                         $('#confirmationModal').modal('show');
@@ -178,13 +182,14 @@ $has_tasks = count($tasks) > 0;
 
             var form = $(this);
             var title = form.find('input#taskTitle').val();
-            var due = form.find('input#taskDueDate').val();
+            var due = form.find('input.flatpickr-input').val();
             var datetc = form.find('input#taskEstDays').val();
             var hourtc = form.find('input#taskEstHours').val();
             var minutetc = form.find('input#taskEstMinutes').val();
             var location = form.find('input#taskLocation').val();
             var notes = form.find('textarea#taskNotes').val();
             var taskid = form.find('input#taskid').val();
+
             $.ajax({
                 type: 'POST',
                 data: 'request=editTask&taskid=' + taskid + '&task=' + title + '&due='
@@ -216,7 +221,7 @@ $has_tasks = count($tasks) > 0;
                 url: '<?php echo API_URL . 'index.php' ?>',
                 async: true,
                 success: function (data) {
-                    //success
+                    // If response code was returned (success)
                     if (data == 1) {
                         var modalDiv = form.parent().parent();
                         modalDiv.modal('hide');
@@ -233,8 +238,6 @@ $has_tasks = count($tasks) > 0;
 
         // Confirmation for task creation/deletion/modification.
         $('#confirmationModal').on('hidden.bs.modal', function (e) {
-            taskContainer.empty();
-            loaderContainer.show();
             reloadTasks();
         });
 
@@ -263,19 +266,25 @@ $has_tasks = count($tasks) > 0;
         // Handle and sumbit search for task.
         $(document).on("submit", "form#search", function (e) {
             e.preventDefault();
+
             var form = $(this);
             var term = form.find('input#searchterm').val();
+
+            taskContainer.empty();
+            loaderContainer.show();
+
             $.ajax({
                 type: 'POST',
                 data: 'request=searchTasks&term=' + term,
                 url: '<?php echo API_URL . 'index.php' ?>',
                 async: true,
                 success: function (data) {
-                    //success
                     if (data != "") {
                         taskContainer.html(data);
-                        loaderContainer.hide();
+                    } else {
+                        taskContainer.html('<p class="text-center">No results found! Please search again.</p>');
                     }
+                    loaderContainer.hide();
                 },
                 error: function (data) {
                     console.log('Search error!: ' + data);

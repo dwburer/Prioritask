@@ -23,8 +23,6 @@
         
         <link href="css/main.css" rel="stylesheet">
         <link href="css/dashboard.css" rel="stylesheet">
-        <link href="css/card.css" rel="stylesheet">
-        <link href="css/edit_task.css" rel="stylesheet">
     </head>
     <body>
         <!--[if lte IE 9]>
@@ -62,17 +60,5 @@
 
         <?php startblock('footer_js') ?>
         <?php endblock() ?>
-
-        <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-        <script>
-            window.ga = function () {
-                ga.q.push(arguments)
-            };
-            ga.q = [];
-            ga.l = +new Date;
-            ga('create', 'UA-XXXXX-Y', 'auto');
-            ga('send', 'pageview')
-        </script>
-        <script src="https://www.google-analytics.com/analytics.js" async defer></script>
     </body>
 </html>
