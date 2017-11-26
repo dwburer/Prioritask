@@ -7,7 +7,7 @@ function renderTask($task) { ?>
     <div class="task card mb-5" id="<?= $task['taskid'] ?>">
 
         <!-- Displays the task's title -->
-        <div class="card-header"><?= $task['task_name'] ?></div>
+        <div class="card-header"><?= $task['task_name'] ?><span class="text-muted"> - <?php echo date_format(date_create($task['when_due']), 'm-d-Y'); ?></span></div>
 
         <?php
 

@@ -24,6 +24,3 @@
 - [moment.js](https://momentjs.com/) (JavaScript datetime management)
 - [flatpickrv4](https://chmln.github.io/flatpickr/) (Javascript datetime control)
 - [Font Awesome](http://fontawesome.io/) (Icon and glyph font toolkit)
-
-DOCUMENT ROOT = /public/
-
