@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Completely renders a task to a card, including accompanying modals and neccesary javascript.
+ */
 function renderTask($task) { ?>
     <div class="task card mb-5" id="<?= $task['taskid'] ?>">
 
@@ -16,6 +19,7 @@ function renderTask($task) { ?>
 
                     <div class="row">
                         <div class="col">
+                        <!-- Detail toggle -->
                             <a data-toggle="collapse" href="#taskDetail<?= $task['taskid'] ?>" aria-expanded="false" aria-controls="taskDetail<?= $task['taskid'] ?>">
                                 Details <i class="fa fa-chevron-down" aria-hidden="true"></i>
                             </a>
@@ -46,6 +50,7 @@ function renderTask($task) { ?>
                                 </div>
                                 <div class="row">
                                     <div class="col">
+                                        <!-- Show the textual and graphical location of the task -->
                                         <p class="card-due-on-header mb-0">
                                             Location:
                                         </p>
@@ -65,7 +70,7 @@ function renderTask($task) { ?>
                     </div>
                     <hr>
                     <div class="row justify-content-between no-gutters">
-                        <div class="col">
+                        <div class="col-12 col-sm mb-3 mb-sm-0 text-center text-sm-left">
                             <?php if ($task['completed'] > 0) { ?>
                                 <a href="#" taskid="<?= $task['taskid'] ?>" class="btn btn-primary">
                                     <i class="fa fa-check mr-2" aria-hidden="true"></i>Completed
@@ -76,13 +81,13 @@ function renderTask($task) { ?>
                                 </a>
                             <?php } ?>
                         </div>
-                        <div class="col col-sm-auto">
+                        <div class="col-12 col-sm-auto mb-3 mb-sm-0 text-center">
                             <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#editModal<?= $task['taskid'] ?>">
                                 <i class="fa fa-pencil mr-2" aria-hidden="true"></i>Edit
                             </a>
                         </div>
-                        <div class="col col-sm-auto">
-                            <a href="#" class="btn btn-danger ml-2" data-toggle="modal" data-target="#deleteModal<?= $task['taskid'] ?>">
+                        <div class="col-12 col-sm-auto text-center">
+                            <a href="#" class="btn btn-danger ml-sm-2" data-toggle="modal" data-target="#deleteModal<?= $task['taskid'] ?>">
                                 <i class="fa fa-times mr-2" aria-hidden="true"></i>Delete
                             </a>
                         </div>
@@ -93,8 +98,10 @@ function renderTask($task) { ?>
         <div class="card-footer">
             <?php
 
+            // Urgency is calculated as (time required to complete)/(time remaining until due date)
             $urgency = 0;
 
+            // If a task is marked as completed, leave urgency as zero.
             if ($task['completed'] == 0) {
                 $to_time = strtotime(date("Y-m-d H:i:s"));
                 $from_time = strtotime($task['when_due']);
@@ -139,11 +146,6 @@ function renderTask($task) { ?>
             }
 
             ?>
-            
-          <!--   <p><i>TODO: visually indicate these metrics (urgency) in the with the card formatting/styling</i></p>
-            <p>Time remaining from today until due date (minutes): <?= $time_remaining ?></p>
-            <p>Estimated time left needed to spend on task until it is complete (inlcuding % done): <?= $minutes_to_complete ?></p>
-            <p><?= $urgency ?></p> -->
 
             <p class="text-center text-<?= $urgency_bar_class ?> mb-0">Urgency level:</p>
             <h4 class="text-center text-<?= $urgency_bar_class ?>"><?= $urgency_percentage_text ?></h4>
@@ -153,7 +155,7 @@ function renderTask($task) { ?>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Task deletion modal -->
     <div class="modal fade" id="deleteModal<?= $task['taskid'] ?>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form id="deletetask">
@@ -177,7 +179,7 @@ function renderTask($task) { ?>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Task edit modal -->
     <div class="modal fade" id="editModal<?= $task['taskid'] ?>" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form id="edittask">

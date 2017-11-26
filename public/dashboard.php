@@ -10,10 +10,10 @@ $has_tasks = count($tasks) > 0;
 <h2>Dashboard</h2>
 
 <div class="card-list">
-    <!-- Trigger addTask modal -->
     <div class="add-card-button mb-3">
         <div class="row justify-content-center">
             <div class="col col-auto">
+                <!-- Trigger addTask modal -->
                 <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#taskModal">
                     <?= ($has_tasks ? 'Add a new task' : 'Add a task') ?>
                 </button>
@@ -158,7 +158,7 @@ $has_tasks = count($tasks) > 0;
                 url: '<?php echo API_URL . 'index.php' ?>',
                 async: true,
                 success: function (data) {
-                    //success
+                    // If response code was returned (success)
                     if (data == 1) {
                         $('#taskModal').modal('hide');
                         $('#confirmationModal').modal('show');
@@ -216,7 +216,7 @@ $has_tasks = count($tasks) > 0;
                 url: '<?php echo API_URL . 'index.php' ?>',
                 async: true,
                 success: function (data) {
-                    //success
+                    // If response code was returned (success)
                     if (data == 1) {
                         var modalDiv = form.parent().parent();
                         modalDiv.modal('hide');

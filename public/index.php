@@ -36,19 +36,18 @@
     <script type="text/javascript">
         $(function () {
             $("div#regfield").hide();
-            // Checking if user is logged in then redirecting them to the dashboard if they are
-            // jQuery ajax call to the api
+            // Checking if user is logged in, and then redirecting them to the dashboard if they are.
+            // Ajax call to the API for login verification.
             $.ajax({
                 type: 'POST',
                 data: 'request=checklogin',
                 url: '<?php echo API_URL . 'index.php'?>',
                 async: true,
                 success: function (response) {
-                    //If api returns 1
+                    //If API returns 1 (success)
                     if (response == 1) {
                         document.location.href = 'dashboard.php';
                     }
-                    //Otherwise do nothing
                 },
                 error: function () {
                     alert("An error has occured while verifying logged-in status!");
