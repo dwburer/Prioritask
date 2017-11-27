@@ -6,6 +6,20 @@
 
 ### Table of Contents
 
+- [Members](#members)
+- [Implementation Links](#implementation-links)
+- [Libraries Used](#libraries-used)
+- [Abstract](#abstract)
+- [Report](#introduction)
+  - [Introduction](#introduction)
+  - [Proposed Milestones](#proposed-milestones)
+  - [User-centered Design](#user-centered-design)
+    - [Task Urgency](#task-urgency)
+  - [Database Diagram](#database-diagram)
+  - [Implementation and Deployment](#implementation-and-deployment)
+  - [Conclusion](#conclusion)
+    - [Evaluation](#evaluation)
+    - [Future Considerations](#future-considerations)
 
 ### Members
 - Daniel Burer
@@ -28,7 +42,8 @@
 - [flatpickrv4](https://chmln.github.io/flatpickr/) (Javascript datetime control)
 - [Font Awesome](http://fontawesome.io/) (Icon and glyph font toolkit)
 
-***Abstract* - This project is centered around the design and implementation of a lightweight “To-Do List” application with a heavy focus placed on an effective, intuitive user experience. The primary metric used to organize tasks is “urgency”, a number calculated from due dates and time estimates. This metric is translated into visual indicators to signify the importance, or priority, of a task. The user interface adopts a minimalist aesthetic to eliminate distracting elements and place focus on the most import layout components. Additionally, as a web-based application with user authentication, Prioritask achieves cross-platform functionality and accessibility across multiple devices. The visual distinctions of urgency in conjunction with the previously mentioned user experience considerations are key attributes that grant this implementation the desired focus on productive, natural use.**
+### *Abstract*
+This project is centered around the design and implementation of a lightweight “To-Do List” application with a heavy focus placed on an effective, intuitive user experience. The primary metric used to organize tasks is “urgency”, a number calculated from due dates and time estimates. This metric is translated into visual indicators to signify the importance, or priority, of a task. The user interface adopts a minimalist aesthetic to eliminate distracting elements and place focus on the most import layout components. Additionally, as a web-based application with user authentication, Prioritask achieves cross-platform functionality and accessibility across multiple devices. The visual distinctions of urgency in conjunction with the previously mentioned user experience considerations are key attributes that grant this implementation the desired focus on productive, natural use.**
 
 ### Introduction
 
@@ -59,11 +74,13 @@ An issue that many existing task scheduling applications currently have is that 
 
 Below is the ER diagram for the project’s data model, implemented as a MySQL database.
 
+![image of database diagram](https://github.com/dwburer/Prioritask/blob/master/mysql/DIAGRAM.png)
+
 ### Implementation and Deployment
 
 Prioritask is implemented as a full-stack web application. A frontend web app provides our user interface and presents data to the user from our backend server framework. The frontend is built with responsive HTML and JavaScript and handles asynchronous data transfer from a dedicated API constructed with PHP. The backend is deployed on a dedicated cloud instance, using a LAMP stack on Ubuntu for our implementation. The front end interface utilizes a simple registration to allow the storage and access of tasks from the MySQL database across multiple devices. We used several third party party libraries, such as Bootstrap, flatpickr, jQuery, and Google Maps, to improve the user's experience with thoroughly tested, well recognized web elements.
 
-### CONCLUSION
+### Conclusion
 
 #### Evaluation
 
