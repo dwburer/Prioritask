@@ -124,6 +124,9 @@ $has_tasks = count($tasks) > 0;
                     if (data != "") {
                         taskContainer.html(data);
                         loaderContainer.hide();
+                    } else {
+                        taskContainer.html('<h5 class="getting-started pb-4">Looks like you don\'t have any task cards yet!  Click the \'Add a task\' button to get started!</h5>');
+                        loaderContainer.hide();
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
