@@ -24,11 +24,9 @@
     - [Future Considerations](#future-considerations)
 
 ### Members
-- Daniel Burer
-- Alexander Cockrum
-- Brett Mitchell
-- Mitchell Murphy
-- Deon Sanchez
+- Daniel Burer (group leader, frontend developer, backend developer)
+- Mitchell Murphy (backend developer, database design)
+- Deon Sanchez (requirements, documentation)
 
 ### Implementation Links
 - HTML + JavaScript - Frontend development and all user-facing components.
