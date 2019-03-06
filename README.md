@@ -24,8 +24,8 @@
     - [Future Considerations](#future-considerations)
 
 ### Members
-- Daniel Burer (group leader, frontend developer, backend developer)
-- Mitchell Murphy (backend developer, database design)
+- [Daniel Burer](https://github.com/dwburer) (group leader, frontend developer, backend developer)
+- [Mitchell Murphy](https://github.com/mitchellm) (backend developer, database design)
 - Deon Sanchez (requirements, documentation)
 
 ### Implementation Links
